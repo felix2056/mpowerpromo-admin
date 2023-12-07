@@ -134,7 +134,7 @@
                                                                             <div class="input-group-prepend">
                                                                                 <div class="input-group-text">https://</div>
                                                                             </div>
-                                                                            <input v-model="store.subdomain" type="text" placeholder="Sub Domain" class="form-control" id="__BVID__88" :class="{ 'is-invalid': validationErrors.url }">
+                                                                            <input v-model="store.subdomain" type="text" placeholder="Sub Domain" class="form-control" id="__BVID__88" :class="{ 'is-invalid': validationErrors.subdomain }">
                                                                         </div>
                                                                     </div>
                                                                     <div style="padding: 22px 5px 0px; line-height: 16px;">.
@@ -228,6 +228,17 @@
                                                                             class="form-control" data-mask="########" data-previous-value=""
                                                                             aria-required="false" aria-invalid="false">
                                                                     </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="pt-2 mt-2">
+                                                            <div><label>Verify password</label>
+                                                                <div class="d-flex mb-2">
+                                                                    <input v-model="store.password" type="password" placeholder="Verify password" class="form-control" id="__BVID__88" :class="{ 'is-invalid': validationErrors.password }">
+                                                                </div>
+                                                                <div v-if="validationErrors.password" class="invalid-feedback d-block">
+                                                                    {{ validationErrors.password[0] }}
                                                                 </div>
                                                             </div>
                                                         </div>

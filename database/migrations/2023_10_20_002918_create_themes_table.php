@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string("author")->nullable();
             $table->string("author_url")->nullable();
             $table->text("description")->nullable();
+            $table->json("assets")->nullable();
             $table->string("screenshot")->nullable();
             $table->string("preview_url")->nullable();
             $table->string("download_url")->nullable();

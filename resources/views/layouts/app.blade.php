@@ -1046,8 +1046,97 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="js/app.7670e93d.js"></script>
+    <script src="/js/app.7670e93d.js"></script>
 
-    @vite('resources/js/app.js')    
+    <!-- templates -->
+    @include('includes.builder-templates')
+
+    <!-- modals -->
+    @include('includes.builder-modals')
+
+    <!-- builder code-->
+    <script src="/libs/builder/builder.js"></script>	
+    <!-- undo manager-->
+    <script src="/libs/builder/undo.js"></script>	
+    <!-- inputs-->
+    <script src="/libs/builder/inputs.js"></script>	
+    <!-- components-->
+    <script src="/libs/builder/components-bootstrap4.js"></script>	
+    <script src="/libs/builder/components-widgets.js"></script>
+
+    <!-- media gallery -->
+	<link href="/libs/media/media.css" rel="stylesheet">
+	<script>
+		window.mediaPath = '../../media';
+		Vvveb.themeBaseUrl = 'demo/landing/';
+	</script>
+	<script src="/libs/media/media.js"></script>
+	<script src="/libs/media/openverse.js"></script>
+	<script src="/libs/builder/plugin-media.js"></script>
+
+    <!-- bootstrap colorpicker //uncomment bellow scripts to enable -->
+	<!--
+<script src="/libs/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+<link href="libs/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+<script src="/libs/builder/plugin-bootstrap-colorpicker.js"></script>
+-->
+
+	<!-- components-->
+	<!-- script src="/libs/builder/components-server.js"></script -->
+	<script src="/libs/builder/plugin-google-fonts.js"></script>
+	<script src="/libs/builder/components-common.js"></script>
+	<script src="/libs/builder/components-html.js"></script>
+	<script src="/libs/builder/plugin-aos.js"></script>
+	<script src="/libs/builder/components-elements.js"></script>
+	<script src="/libs/builder/section.js"></script>
+	<script src="/libs/builder/components-bootstrap5.js"></script>
+	<script src="/libs/builder/components-widgets.js"></script>
+
+	<!-- sections-->
+	<!-- <script src="demo/landing/sections/sections.js"></script> -->
+	<script src="/libs/builder/sections-bootstrap4.js"></script>
+
+	<!-- blocks-->
+	<script src="/libs/builder/blocks-bootstrap4.js"></script>
+
+	<!-- plugins -->
+
+	<!-- code mirror - code editor syntax highlight -->
+	<link href="/libs/codemirror/lib/codemirror.css" rel="stylesheet" />
+	<link href="/libs/codemirror/theme/material.css" rel="stylesheet" />
+	<script src="/libs/codemirror/lib/codemirror.js"></script>
+	<script src="/libs/codemirror/lib/xml.js"></script>
+	<script src="/libs/codemirror/lib/formatting.js"></script>
+	<script src="/libs/builder/plugin-codemirror.js"></script>
+
+
+	<!-- 
+Tinymce plugin
+Clone or copy https://github.com/tinymce/tinymce-dist to libs/tinymce-dist 
+-->
+	<!-- 
+<script src="/libs/tinymce-dist/tinymce.min.js"></script>
+<script src="/libs/builder/plugin-tinymce.js"></script>	
+-->
+
+	<!-- 
+CKEditor plugin
+Unzip the latest ckeditor release zip from https://github.com/ckeditor/ckeditor4/releases to libs/ckeditor or use the CDN
+-->
+	<!--
+<script src="/libs/ckeditor/ckeditor.js"></script> <script src="https://cdn.ckeditor.com/ckeditor5/39.0.2/classic/ckeditor.js"></script>
+<script src="/libs/builder/plugin-ckeditor.js"></script>	
+-->
+
+	<!-- jszip - download page as zip -->
+	<script src="/libs/jszip/jszip.min.js"></script>
+	<script src="/libs/jszip/filesaver.min.js"></script>
+	<script src="/libs/builder/plugin-jszip.js"></script>
+
+
+	<!-- autocomplete plugin used by autocomplete input-->
+	<script src="/libs/autocomplete/jquery.autocomplete.js"></script>
+
+    @vite('resources/js/app.js') 
 </body>
 </html>

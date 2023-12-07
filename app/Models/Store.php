@@ -11,6 +11,18 @@ class Store extends Model
 
     protected $guarded = [];
 
+    protected $appends = [
+        'host',
+        'logo_url',
+        'directory',
+        'theme',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function products()
     {
         return $this->hasMany(Product::class);
@@ -50,5 +62,29 @@ class Store extends Model
     {
         return $this->hasMany(StoreTheme::class);
     }
-    
+
+    public function pages()
+    {
+        return $this->hasMany(StorePage::class);
+    }
+
+    public function getHostAttribute()
+    {
+        return $this->subdomain . '.' . $this->domain;
+    }
+
+    public function getLogoUrlAttribute()
+    {
+        return $this->logo ? asset('storage/' . $this->logo) : null;
+    }
+
+    public function getDirectoryAttribute()
+    {
+        return asset('storage/stores/' . $this->host);
+    }
+
+    public function getThemeAttribute()
+    {
+        return $this->themes()->where('is_published', true)->first();
+    }
 }

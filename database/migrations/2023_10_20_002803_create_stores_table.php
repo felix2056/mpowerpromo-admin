@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger("user_id")->unsigned();
             $table->string("name");
             $table->string("logo")->nullable();
             $table->string("domain");
@@ -24,8 +25,12 @@ return new class extends Migration
             $table->string("country_flag");
             $table->string("phone_number");
             $table->string("extension")->nullable();
+            $table->boolean("is_active")->default(false);
+            $table->enum("install_status", ["pending", "installing", "installed", "failed"])->default("pending");
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign("user_id")->references("id")->on("users")->onDelete("cascade");
         });
     }
 

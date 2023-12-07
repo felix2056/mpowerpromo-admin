@@ -17,8 +17,10 @@ return new class extends Migration
             $table->id();
             $table->bigInteger("store_id")->unsigned();
             $table->bigInteger("theme_id")->unsigned();
-            $table->string("slug")->unique();
+            $table->string("name");
             $table->string("title");
+            $table->string("url");
+            $table->string("file");
             $table->string("description")->nullable();
             $table->string("keywords")->nullable();
             $table->string("image")->nullable();
