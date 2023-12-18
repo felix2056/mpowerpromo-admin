@@ -35,6 +35,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     });
 
     Route::group(['prefix' => 'stores'], function () {
+        Route::get('', 'StoreController@index')->name('stores.index');
         Route::get('{slug}', 'StoreController@show')->name('stores.show');
         Route::post('create', 'StoreController@store')->name('stores.store');
         Route::post('upload', 'StoreController@upload')->name('stores.upload');

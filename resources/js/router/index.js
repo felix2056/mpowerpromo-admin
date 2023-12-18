@@ -115,15 +115,15 @@ const router = createRouter({
                 title: `Company`
             }
         },
-        {
-            path: '/customers/companies/edit/:slug',
-            name: 'edit-company',
-            component: () => import('@/components/companies/Edit.vue'),
-            meta: {
-                middleware: "auth",
-                title: `Edit Company`
-            }
-        },
+        // {
+        //     path: '/customers/companies/edit/:slug',
+        //     name: 'edit-company',
+        //     component: () => import('@/components/companies/Edit.vue'),
+        //     meta: {
+        //         middleware: "auth",
+        //         title: `Edit Company`
+        //     }
+        // },
         {
             path: '/orders',
             name: 'orders',
@@ -161,7 +161,7 @@ const router = createRouter({
             }
         },
         {
-            path: '/stores',
+            path: '/storess',
             name: 'stores',
             component: () => import('@/components/stores/Index.vue'),
             meta: {
