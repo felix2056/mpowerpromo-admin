@@ -93,6 +93,11 @@
     "file": "assets/la-solid-900-10a68e01.woff2",
     "src": "public/fonts/line-awesome/la-solid-900.woff2"
   },
+  "resources/css/app.css": {
+    "file": "assets/app-4ed993c7.js",
+    "isEntry": true,
+    "src": "resources/css/app.css"
+  },
   "resources/js/app.js": {
     "dynamicImports": [
       "resources/js/components/Login.vue",
@@ -337,10 +342,5 @@
     ],
     "isDynamicEntry": true,
     "src": "resources/js/components/stores/single/Index.vue"
-  },
-  "resources/sass/app.scss": {
-    "file": "assets/app-041e359a.css",
-    "isEntry": true,
-    "src": "resources/sass/app.scss"
   }
 }
