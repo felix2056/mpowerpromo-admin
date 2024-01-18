@@ -60,7 +60,7 @@
                       <tbody>
                         <tr v-for="store in stores" :key="store.id" class="VueTables__row undefined">
                           <td tabindex="0" class="">
-                            <a :href="`/stores/${store.slug}`" class="">{{ store.name }}</a>
+                            <a :href="`/stores/${store.host}`" class="">{{ store.name }}</a>
                           </td>
                           <td tabindex="0" class="">
                             <span></span>
@@ -145,7 +145,7 @@ export default {
 
       axios.get('/stores')
         .then(({ data }) => {
-          this.stores = data.stores;
+          this.stores = data.stores
         })
         .catch(error => console.log(error))
         .finally(() => this.isLoading = false);

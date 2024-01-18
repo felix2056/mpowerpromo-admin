@@ -36,29 +36,49 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::group(['prefix' => 'stores'], function () {
         Route::get('', 'StoreController@index')->name('stores.index');
-        Route::get('{slug}', 'StoreController@show')->name('stores.show');
+        Route::get('single/{host}', 'StoreController@show')->name('stores.show');
         Route::post('create', 'StoreController@store')->name('stores.store');
         Route::post('upload', 'StoreController@upload')->name('stores.upload');
 
-        // editing store theme
-        Route::get('{slug}/theme', 'ThemeController@show');
-
-        Route::group(['prefix' => 'theme'], function () {
-            Route::get('', 'ThemeController@index')->name('stores.theme.index');
-            Route::get('{slug}/components', 'ThemeController@components')->name('stores.theme.components');
+        Route::group(['middleware' => 'set.tenant.connection'], function () {
+            Route::group(['prefix' => 'categories'], function () {
+                Route::get('', 'StoreCategoryController@index')->name('stores.categories.index');
+                Route::get('{slug}', 'StoreCategoryController@show')->name('stores.categories.show');
+                Route::post('create', 'StoreCategoryController@store')->name('stores.categories.store');
+            });
 
             Route::group(['prefix' => 'components'], function () {
-                Route::group(['prefix' => 'announcement-bar'], function () {
-                    Route::get('{id}', 'AnnouncementBarController@show')->name('stores.theme.components.announcement-bar.show');
-                    Route::post('update', 'AnnouncementBarController@update')->name('stores.theme.components.announcement-bar.update');
+                Route::get('', 'StoreComponentController@index')->name('stores.components.index');
+                Route::get('{slug}', 'StoreComponentController@show')->name('stores.components.show');
+                Route::post('create', 'StoreComponentController@store')->name('stores.components.store');
+            });
 
-                    Route::get('{id}/announcement-block', 'AnnouncementBlockController@show')->name('stores.theme.components.announcement-bar.announcement-block.show');
-                    Route::group(['prefix' => 'announcement-block'], function () {
-                        Route::post('create', 'AnnouncementBlockController@store')->name('stores.theme.components.announcement-bar.announcement-block.store');
-                        Route::post('update', 'AnnouncementBlockController@update')->name('stores.theme.components.announcement-bar.announcement-block.update');
-                        Route::post('delete', 'AnnouncementBlockController@destroy')->name('stores.theme.components.announcement-bar.announcement-block.destroy');
-                    });
-                });
+            Route::group(['prefix' => 'head-tags'], function () {
+                Route::get('', 'StoreHeadTagController@index')->name('stores.head-tags.index');
+                Route::get('{slug}', 'StoreHeadTagController@show')->name('stores.head-tags.show');
+                Route::post('create', 'StoreHeadTagController@store')->name('stores.head-tags.store');
+                Route::delete('{tag_type}/{tag_id}', 'StoreHeadTagController@destroy')->name('stores.head-tags.destroy');
+
+                Route::post('meta/create', 'StoreHeadTagController@createMetaTag')->name('stores.head-tags.meta.create');
+                Route::post('link/create', 'StoreHeadTagController@createLinkTag')->name('stores.head-tags.link.create');
+                Route::post('script/create', 'StoreHeadTagController@createScriptTag')->name('stores.head-tags.script.create');
+                Route::post('no-script/create', 'StoreHeadTagController@createNoScriptTag')->name('stores.head-tags.no-script.create');
+                Route::post('style/create', 'StoreHeadTagController@createStyleTag')->name('stores.head-tags.style.create');
+                Route::post('title/create', 'StoreHeadTagController@createTitleTag')->name('stores.head-tags.title.create');
+            });
+
+            Route::group(['prefix' => 'media'], function () {
+                Route::get('', 'StoreMediaController@index')->name('stores.media.index');
+                Route::get('{slug}', 'StoreMediaController@show')->name('stores.media.show');
+                Route::post('create', 'StoreMediaController@store')->name('stores.media.store');
+            });
+
+            Route::group(['prefix' => 'theme'], function () {
+                Route::get('', 'StoreThemeController@index')->name('stores.theme.index');
+                Route::match(['get', 'post'], 'body', 'StoreThemeController@bodySetting')->name('stores.theme.body');
+                Route::match(['get', 'post'], 'color-system', 'StoreThemeController@colorSystem')->name('stores.theme.color-system');
+                Route::match(['get', 'post'], 'options', 'StoreThemeController@optionSetting')->name('stores.theme.options');
+                Route::match(['get', 'post'], 'typography', 'StoreThemeController@typographySetting')->name('stores.theme.typography');
             });
         });
     });

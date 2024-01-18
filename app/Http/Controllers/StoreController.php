@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\ShouldInstallVvveb;
+use App\Models\Category;
+use App\Models\CategoryType;
+use App\Models\HeadTag;
+use App\Models\LinkTag;
+use App\Models\Page;
 use App\Models\Store;
+use App\Models\StoreUrl;
 use App\Models\TemporaryFile;
 use App\Models\Theme;
 use App\Models\User;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -15,11 +22,38 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
+use Hyn\Tenancy\Contracts\Repositories\WebsiteRepository;
+use Hyn\Tenancy\Models\Website;
+
+use Hyn\Tenancy\Models\Hostname;
+use Hyn\Tenancy\Contracts\Repositories\HostnameRepository;
+
+use Hyn\Tenancy\Environment;
+
 class StoreController extends Controller
 {
     public function index()
     {
-        $stores = Store::all();
+        $stores = [];
+
+        // get all websites (stores) that belong to the current user
+        $user = User::find(Auth::user()->id);
+        $websites = $user->websites;
+
+        foreach ($websites as $website) {
+            // switch to the website's database
+            app(Environment::class)->tenant($website);
+
+            // get all stores
+            $websitestores = Store::all();
+
+            foreach ($websitestores as $store) {
+                $stores[] = $store;
+            }
+
+            // switch back to the central (default) database
+            app(Environment::class)->tenant();
+        }
 
         return response()->json([
             'message' => 'Successfully retrieved stores',
@@ -27,15 +61,28 @@ class StoreController extends Controller
         ], 200);
     }
 
-    public function show($slug)
+    public function show($host)
     {
-        $store = Store::where('slug', $slug)->first();
+        $user = User::find(Auth::user()->id);
+        $website = $user->websites()->where('uuid', $host)->first();
 
-        if (!$store) {
-            return response()->json([
-                'message' => 'Store not found'
-            ], 404);
-        }
+        if (!$website) return response()->json([
+            'message' => 'Website not found'
+        ], 404);
+
+        // switch to the website's database
+        app(Environment::class)->tenant($website);
+
+        // get store
+        $subdomain = explode('.', $host)[0];
+        $store = Store::where('subdomain', $subdomain)->first();
+
+        if (!$store) return response()->json([
+            'message' => 'Store not found'
+        ], 404);
+
+        // switch back to the central (default) database
+        app(Environment::class)->tenant();
 
         return response()->json([
             'message' => 'Successfully retrieved store',
@@ -68,25 +115,45 @@ class StoreController extends Controller
 
         $user = User::find(Auth::user()->id);
 
-        // check if store already exists
-        $store = Store::where('subdomain', $request->subdomain)->first();
-        if ($store) return response()->json([
-            'message' => 'Validation failed',
-            'errors' => ['subdomain' => 'This Store subdomain already exists']
-        ], 422);
-
         // check if password is correct
         if (!Hash::check($request->password, $user->password)) return response()->json([
             'message' => 'Validation failed',
             'errors' => ['password' => 'Password is incorrect']
         ], 422);
 
-        $store = $user->stores()->create([
+        // check if website and hostname already exists
+        $website = Website::where('uuid', $request->subdomain . '.' . $request->domain)->first();
+        $hostname = Hostname::where('fqdn', $request->subdomain . '.' . $request->domain)->first();
+        if ($website || $hostname) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => ['subdomain' => 'There is already a store with this subdomain']
+            ], 422);
+        }
+
+        // create a new website (store) in the system
+        $website = new Website();
+        $website->uuid = $request->subdomain . '.' . $request->domain;
+        $website->managed_by_database_connection = 'system';
+        $website->managed_by_user_id = $user->id;
+        app(WebsiteRepository::class)->create($website);
+
+        // associate the website with a hostname
+        $hostname = new Hostname();
+        $hostname->fqdn = $website->uuid;
+        $hostname = app(HostnameRepository::class)->create($hostname);
+        app(HostnameRepository::class)->attach($hostname, $website);
+
+        // switch to the website's database
+        app(Environment::class)->tenant($website);
+
+        // create store
+        $store = Store::create([
             'name' => $request->name,
             'logo' => $request->logo,
             'domain' => $request->domain,
             'subdomain' => $request->subdomain,
-            'slug' => md5(time()), 
+            'slug' => strrev(md5(time())),
             'country_code' => $request->country_code,
             'country_flag' => $request->country_flag,
             'phone_number' => $request->phone_number,
@@ -94,6 +161,9 @@ class StoreController extends Controller
         ]);
 
         if (!$store) {
+            // switch back to the central (default) database
+            app(Environment::class)->tenant();
+
             return response()->json([
                 'message' => 'Failed to create store'
             ], 500);
@@ -103,193 +173,31 @@ class StoreController extends Controller
             $redirectUrls = $request->redirectUrls;
 
             foreach ($redirectUrls as $redirectUrl) {
-                $store->redirectUrls()->create([
+                StoreUrl::create([
                     'url' => $redirectUrl,
                 ]);
             }
         }
 
-        Artisan::call('queue:work', [
-            '--queue' => 'vvveb-install',
-            '--stop-when-empty' => true,
-        ]);
-        
-        ShouldInstallVvveb::dispatch($store->id, $user->email, $request->password)->onQueue('vvveb-install');
-        
+        // create theme
+        $this->createTheme($store);
+
+        // create pages
+        $this->createPages();
+
+        // create store head tags
+        $this->createHeadTags($store);
+
+        // create store category types
+        $this->createCategoryTypes();
+
+        // switch back to the central (default) database
+        app(Environment::class)->tenant();
+
         return response()->json([
             'message' => 'Successfully created store',
             'store' => $store
         ], 201);
-        
-
-        // // setup store web files
-        // $theme = Theme::where('is_default', true)->first();
-        // if (!$theme) return false;
-
-        // $store_theme = $store->themes()->create([
-        //     'theme_id' => $theme->id,
-        //     'slug' => strrev(md5(time())),
-        //     'is_published' => true,
-        // ]);
-
-        // if (!$store_theme) return false;
-        
-        // // create store directory in storage path
-        // $storeDirectory = public_path('stores/' . $store->host);
-        // if (file_exists($storeDirectory)) return response()->json([
-        //     'message' => 'Store directory already exists'
-        // ], 500);
-
-        // // copy theme directory to store directory
-        // $themeDirectory = public_path('themes/' . $theme->directory);
-        // if (!file_exists($themeDirectory)) return response()->json([
-        //     'message' => 'Theme directory not found ' . $themeDirectory
-        // ], 404);
-
-        // mkdir($storeDirectory, 0777, true);
-        // File::copyDirectory($themeDirectory, $storeDirectory);
-
-        // // if copy failed, delete store theme
-        // if (!file_exists($storeDirectory)) {
-        //     $store->delete();
-        //     return response()->json([
-        //         'message' => 'Failed to copy theme directory to store directory'
-        //     ], 500);
-        // }
-
-        // if ($store->logo) {
-        //     $logo = $store->logo;
-        //     $logo = str_replace(env('APP_URL') . '/temp/', '', $logo);
-        //     $logo = storage_path('app/public/temp/' . $logo);
-
-        //     if (file_exists($logo)) {
-        //         $logoDestination = $storeDirectory . '/assets/images/logo.png';
-        //         copy($logo, $logoDestination);
-        //     }
-        // }
-
-        // if ($store->favicon) {
-        //     $favicon = $store->favicon;
-        //     $favicon = str_replace(env('APP_URL') . '/temp/', '', $favicon);
-        //     $favicon = storage_path('app/public/temp/' . $favicon);
-
-        //     if (file_exists($favicon)) {
-        //         $faviconDestination = $storeDirectory . '/assets/images/favicon.png';
-        //         copy($favicon, $faviconDestination);
-        //     }
-        // }
-
-        // // create store pages
-        // $pages = $store->pages()->createMany([
-        //     [
-        //         'theme_id' => $theme->id,
-        //         'name' => 'home',
-        //         'title' => 'Home | ' . $store->name,
-        //         'url' => '/',
-        //         'file' => 'index.html',
-        //         'description' => 'Home page',
-        //         'keywords' => 'Home page,' . $store->name,
-        //     ],
-        //     [
-        //         'theme_id' => $theme->id,
-        //         'name' => 'about',
-        //         'title' => 'About | ' . $store->name,
-        //         'url' => '/about',
-        //         'file' => 'about.html',
-        //         'description' => 'About page',
-        //         'keywords' => 'About page,' . $store->name,
-        //     ],
-        //     [
-        //         'theme_id' => $theme->id,
-        //         'name' => 'contact',
-        //         'title' => 'Contact | ' . $store->name,
-        //         'url' => '/contact',
-        //         'file' => 'contact.html',
-        //         'description' => 'Contact page',
-        //         'keywords' => 'Contact page,' . $store->name,
-        //     ],
-        //     [
-        //         'theme_id' => $theme->id,
-        //         'name' => 'blog',
-        //         'title' => 'Blog | ' . $store->name,
-        //         'url' => '/blog',
-        //         'file' => 'blog.html',
-        //         'description' => 'Blog page',
-        //         'keywords' => 'Blog page,' . $store->name,
-        //     ],
-        //     [
-        //         'theme_id' => $theme->id,
-        //         'name' => 'blog-post',
-        //         'title' => 'Blog Post | ' . $store->name,
-        //         'url' => '/blog-post',
-        //         'file' => 'blog-post.html',
-        //         'description' => 'Blog Post page',
-        //         'keywords' => 'Blog Post page,' . $store->name,
-        //     ],
-        //     [
-        //         'theme_id' => $theme->id,
-        //         'name' => 'shop',
-        //         'title' => 'Shop | ' . $store->name,
-        //         'url' => '/shop',
-        //         'file' => 'shop.html',
-        //         'description' => 'Shop page',
-        //         'keywords' => 'Shop page,' . $store->name,
-        //     ],
-        //     [
-        //         'theme_id' => $theme->id,
-        //         'name' => 'product',
-        //         'title' => 'Product | ' . $store->name,
-        //         'url' => '/product',
-        //         'file' => 'product.html',
-        //         'description' => 'Product page',
-        //         'keywords' => 'Product page,' . $store->name,
-        //     ],
-        //     [
-        //         'theme_id' => $theme->id,
-        //         'name' => 'cart',
-        //         'title' => 'Cart | ' . $store->name,
-        //         'url' => '/cart',
-        //         'file' => 'cart.html',
-        //         'description' => 'Cart page',
-        //         'keywords' => 'Cart page,' . $store->name,
-        //     ],
-        //     [
-        //         'theme_id' => $theme->id,
-        //         'name' => 'checkout',
-        //         'title' => 'Checkout | ' . $store->name,
-        //         'url' => '/checkout',
-        //         'file' => 'checkout.html',
-        //         'description' => 'Checkout page',
-        //         'keywords' => 'Checkout page,' . $store->name,
-        //     ],
-        //     [
-        //         'theme_id' => $theme->id,
-        //         'name' => 'thank-you',
-        //         'title' => 'Thank You | ' . $store->name,
-        //         'url' => '/thank-you',
-        //         'file' => 'thank-you.html',
-        //         'description' => 'Thank You page',
-        //         'keywords' => 'Thank You page,' . $store->name,
-        //     ],
-        //     [
-        //         'theme_id' => $theme->id,
-        //         'name' => '404',
-        //         'title' => '404 | ' . $store->name,
-        //         'url' => '/404',
-        //         'file' => '404.html',
-        //         'description' => '404 page',
-        //         'keywords' => '404 page,' . $store->name,
-        //     ],
-        // ]);
-
-        // if (!$pages) return response()->json([
-        //     'message' => 'Failed to create pages'
-        // ], 500);
-
-        // return response()->json([
-        //     'message' => 'Successfully created store',
-        //     'store' => $store
-        // ], 201);
     }
 
     public function update(Request $request, $id)
@@ -374,52 +282,341 @@ class StoreController extends Controller
         ], 200);
     }
 
-    public function builder($slug)
+    protected function createTheme($store)
     {
-        $store = Store::with(['pages' => function ($query) {
-            $query->where('is_published', true);
-        }])->where('slug', $slug)->first();
+        $theme = Theme::create();
 
-        if (!$store) {
-            return response()->json([
-                'message' => 'Store not found'
-            ], 404);
-        }
-
-        return view('builder', compact('store'));
-    }
-
-    private function setupComponents($theme)
-    {
-        $announcement_bar = $theme->announcementBars()->create([
-            'color_scheme' => 'light',
-            'show_separator_line' => true,
-            'show_social_media_icons' => true,
-            'auto_rotate_announcements' => false,
-            'auto_rotate_announcements_interval' => 5,
-            'enable_country_selection' => false,
-            'enable_language_selection' => false,
-            'facebook' => 'https://facebook.com',
-            'instagram' => 'https://instagram.com',
-            'youtube' => 'https://youtube.com',
-            'tiktok' => 'https://tiktok.com',
-            'twitter' => 'https://twitter.com',
-            'pinterest' => 'https://pinterest.com',
-            'snapchat' => 'https://snapchat.com',
-            'tumblr' => 'https://tumblr.com',
-            'vimeo' => 'https://vimeo.com',
-            'custom_css' => '',
+        $theme->colorSystem()->createMany([
+            [
+                'name' => 'Primary',
+                'value' => '#007bff',
+            ],
+            [
+                'name' => 'Secondary',
+                'value' => '#6c757d',
+            ],
+            [
+                'name' => 'Success',
+                'value' => '#28a745',
+            ],
+            [
+                'name' => 'Info',
+                'value' => '#17a2b8',
+            ],
+            [
+                'name' => 'Warning',
+                'value' => '#ffc107',
+            ],
+            [
+                'name' => 'Danger',
+                'value' => '#dc3545',
+            ],
+            [
+                'name' => 'Light',
+                'value' => '#f8f9fa',
+            ],
+            [
+                'name' => 'Dark',
+                'value' => '#343a40',
+            ]
         ]);
 
-        if ($announcement_bar) {
-            $announcement_bar->blocks()->create([
-                'text' => 'Welcome to our store'
-            ]);
+        // update the bootstrap css file to reflect the changes
+        $hash = md5(Str::random(16));
+        $scss = file_get_contents(resource_path('js/components/assets/scss/variables.scss'));
 
-            $announcement_bar->blocks()->create([
-                'text' => 'Free shipping on orders over $50',
-                'link' => 'https://free-shipping.com'
-            ]);
+        $scss_path = resource_path('js/components/assets/scss/theme.scss');
+        $css_path = public_path('css/stores/' . $store->slug);
+        $css_compile_path = public_path('css/stores/app.css');
+
+        if (file_exists($scss_path)) unlink($scss_path);
+        if (file_exists($css_compile_path)) unlink($css_compile_path);
+
+        file_put_contents($scss_path, $scss);
+
+        // if the newly SCSS file exists, run the compile-scss npm script
+        if (file_exists($scss_path)) {
+            exec('npm run compile-scss');
+
+            // make the theme folder if it doesn't exist
+            if (!file_exists($css_path)) mkdir($css_path, 0777, true);
+
+            // move the compiled CSS file
+            $filename = 'theme-' . $hash . '.css';
+            File::move($css_compile_path, $css_path . '/' . $filename);
+
+            $theme->css_file = $filename;
+            $theme->save();
         }
+
+        $theme->bodySetting()->create([
+            'body_background_color' => '#FFFFFF',
+            'body_text_color' => '#000000',
+        ]);
+
+        $theme->typographySetting()->create([
+            'headings_font_weight' => '500',
+        ]);
+
+        $theme->optionSetting()->create([
+            'enable_rounded' => true,
+            'enable_responsive_font_sizes' => true,
+            'enable_shadows' => false,
+            'enable_gradients' => false,
+        ]);
+
+        $theme->breadcrumbSetting()->create([
+            'breadcrumb_padding_x' => '0rem',
+            'breadcrumb_background_color' => '#FFFFFF',
+        ]);
+
+        $theme->linkSetting()->create([
+            'link_decorations' => 'none',
+        ]);
+
+        $theme->componentSetting()->create([
+            'border_width' => '1px',
+            'border_radius' => '.25rem',
+            'border_radius_sm' => '.2rem',
+            'border_radius_lg' => '.3rem',
+        ]);
+
+        $theme->formSetting()->create([
+            'button_border_radius' => '.25rem',
+            'button_border_radius_sm' => '.2rem',
+            'button_border_radius_lg' => '.3rem',
+        ]);
+    }
+
+    protected function createPages()
+    {
+        // create multiple pages
+        Page::create([
+            'navigation_title' => 'About',
+            'meta_title' => 'About | ${siteName}',
+            'static_routes' => 'custom',
+            'slug' => 'about',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Supplier: Global',
+            'meta_title' => '${supplierName} ${searchTerm} ${facetPrefix} ${categoryName} Promotional Products ${facetSuffix} ${closeout}',
+            'meta_description' => '${supplierName} ${searchTerm} ${facetPrefix} ${categoryName} Promotional Products ${facetSuffix} ${closeout}',
+            'static_routes' => 'supplier',
+            'slug' => 'supplier',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Authors',
+            'meta_title' => 'Authors | ${siteName}',
+            'static_routes' => 'authors',
+            'slug' => 'authors',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Occasions',
+            'meta_title' => 'Occasions | ${siteName}',
+            'static_routes' => 'custom',
+            'slug' => 'occasions',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Events',
+            'meta_title' => 'Events: ${siteName}',
+            'static_routes' => 'custom',
+            'slug' => 'events',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Industries',
+            'meta_title' => 'Industries: ${siteName}',
+            'static_routes' => 'custom',
+            'slug' => 'industries',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Themes',
+            'meta_title' => 'Themes | ${siteName}',
+            'static_routes' => 'custom',
+            'slug' => 'themes',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Event: (Template)',
+            'meta_title' => 'Event Page Template',
+            'static_routes' => 'custom',
+            'slug' => 'event/template',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Industry: (Template)',
+            'meta_title' => 'Industry Page Template',
+            'static_routes' => 'custom',
+            'slug' => 'industry/template',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Occasion: (Template)',
+            'meta_title' => 'Occasion Page Template',
+            'static_routes' => 'custom',
+            'slug' => 'occasion/template',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Themes: (Template)',
+            'meta_title' => 'Themes Page Template',
+            'static_routes' => 'custom',
+            'slug' => 'themes/template',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Proof Checkout Confirmation',
+            'meta_title' => 'Proof Checkout Confirmation',
+            'static_routes' => 'proofcheckoutconfirmation',
+            'slug' => 'proofcheckoutconfirmation',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Proof Checkout',
+            'meta_title' => 'Proof Checkout | ${siteName}',
+            'static_routes' => 'proofcheckout',
+            'slug' => 'proofcheckout',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Proof Cart',
+            'meta_title' => 'Proof Cart | ${siteName}',
+            'static_routes' => 'proofcart',
+            'slug' => 'proofcart',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Proof Item Added',
+            'meta_title' => 'Proof Item Added | ${siteName}',
+            'static_routes' => 'proofitemsadded',
+            'slug' => 'proofitemsadded',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Quote Checkout Confirmation',
+            'meta_title' => 'Quote Checkout Confirmation | ${siteName}',
+            'static_routes' => 'quotecheckoutconfirmation',
+            'slug' => 'quotecheckoutconfirmation',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Sample Checkout',
+            'meta_title' => 'Sample Checkout | ${siteName}',
+            'static_routes' => 'samplecheckout',
+            'slug' => 'samplecheckout',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Sample Cart',
+            'meta_title' => 'Sample Cart | ${siteName}',
+            'static_routes' => 'samplecart',
+            'slug' => 'samplecart',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Draft',
+            'meta_title' => 'Draft',
+            'static_routes' => 'custom',
+            'slug' => 'draft',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Contact Confirmation',
+            'meta_title' => 'Contact Confirmation | ${siteName}',
+            'static_routes' => 'custom',
+            'slug' => 'contactconfirmation',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'No Minimum',
+            'meta_title' => 'No Minimum | ${siteName}',
+            'static_routes' => 'products',
+            'slug' => 'products',
+            'additional_slug' => 'no-minimum',
+            'is_enabled' => true
+        ]);
+    }
+
+    protected function createCategoryTypes()
+    {
+
+        CategoryType::create([
+            'name' => 'Blog',
+            'description' => 'Blog category type',
+            'slug' => 'blog',
+        ]);
+        CategoryType::create([
+            'name' => 'Events',
+            'description' => 'Events category type',
+            'slug' => 'events',
+        ]);
+        CategoryType::create([
+            'name' => 'Industries',
+            'description' => 'Industries category type',
+            'slug' => 'industries',
+        ]);
+        CategoryType::create([
+            'name' => 'Knowledge Base',
+            'description' => 'Knowledge Base category type',
+            'slug' => 'knowledge-base',
+        ]);
+        CategoryType::create([
+            'name' => 'Occasions',
+            'description' => 'Occasions category type',
+            'slug' => 'occasions',
+        ]);
+        CategoryType::create([
+            'name' => 'Products',
+            'description' => 'Products category type',
+            'slug' => 'products',
+        ]);
+        CategoryType::create([
+            'name' => 'Templates',
+            'description' => 'Templates category type',
+            'slug' => 'templates',
+        ]);
+        CategoryType::create([
+            'name' => 'Themes',
+            'description' => 'Themes category type',
+            'slug' => 'themes',
+        ]);
+    }
+
+    protected function createHeadTags($store)
+    {
+        $head_tag = HeadTag::create();
+
+        $head_tag->metaTags()->createMany([
+            [
+                'name' => 'content-language',
+                'content' => 'en-us',
+                'description' => 'content-language',
+                'hid' => 'content-language',
+            ]
+        ]);
+
+        $head_tag->linkTags()->createMany([
+            [
+                'href' => 'https://fa.mpowerpromo.com/css/all.css',
+                'rel' => 'stylesheet',
+                'description' => 'fontawesome.all.css',
+                'type' => 'is_external',
+            ],
+            [
+                'href' => 'https://store-media.mpowerpromo.com/5e4ef2d67141a025da688296/assets/1591297900931.ico',
+                'rel' => 'icon',
+                'description' => 'favicon.io',
+                'type' => 'is_external',
+            ],
+            [
+                'href' => config('app.url') . '/css/stores/' . $store->slug . '/' . $head_tag->theme->css_file,
+                'description' => 'Bootstrap Theme',
+            ]
+        ]);
     }
 }

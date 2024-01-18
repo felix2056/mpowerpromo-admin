@@ -23,7 +23,7 @@ export default {
     actions:{
         async get({commit}, {store}) {
             try {
-                const { data } = await axios.get(`/stores/${store}`);
+                const { data } = await axios.get(`/stores/single/${store}`);
                 commit('SET_STORE', data.store);
             } catch (error) {
                 commit('SET_STORE', []);

@@ -14,9 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->command->info('Seeding Themes');
-        $this->call(ThemeSeeder::class);
-
         $this->command->info('Seeding Users');
         $this->call(UserSeeder::class);
     }

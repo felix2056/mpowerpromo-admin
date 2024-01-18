@@ -43,10 +43,10 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the stores for the user.
+     * Get the websites for the user.
      */
-    public function stores()
+    public function websites()
     {
-        return $this->hasMany(Store::class);
+        return $this->hasMany(\Hyn\Tenancy\Models\Website::class, 'managed_by_user_id');
     }
 }

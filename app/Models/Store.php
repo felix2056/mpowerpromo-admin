@@ -5,22 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Hyn\Tenancy\Traits\UsesTenantConnection;
+
 class Store extends Model
 {
-    use HasFactory;
+    use HasFactory, UsesTenantConnection;
 
     protected $guarded = [];
 
     protected $appends = [
         'host',
         'logo_url',
-        'directory',
-        'theme',
+        'directory'
     ];
 
-    public function user()
+    public function headTags()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(HeadTag::class);
     }
 
     public function products()
@@ -58,16 +59,6 @@ class Store extends Model
         return $this->hasMany(StoreUrl::class);
     }
 
-    public function themes()
-    {
-        return $this->hasMany(StoreTheme::class);
-    }
-
-    public function pages()
-    {
-        return $this->hasMany(StorePage::class);
-    }
-
     public function getHostAttribute()
     {
         return $this->subdomain . '.' . $this->domain;
@@ -81,10 +72,5 @@ class Store extends Model
     public function getDirectoryAttribute()
     {
         return asset('storage/stores/' . $this->host);
-    }
-
-    public function getThemeAttribute()
-    {
-        return $this->themes()->where('is_published', true)->first();
     }
 }

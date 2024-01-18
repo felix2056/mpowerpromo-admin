@@ -16,6 +16,9 @@ import vuedraggable from 'vuedraggable';
 // import 'bootstrap/dist/css/bootstrap.css'
 // import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+import VSwatches from 'vue3-swatches'
+import 'vue3-swatches/dist/style.css'
+
 // if 401 response returned from server, remove token from localstorage
 axios.interceptors.response.use(
     response => response,
@@ -39,6 +42,7 @@ app.use(router);
 app.use(store);
 
 app.use(vuedraggable);
+app.use(VSwatches);
 
 /**
  * The following block of code may be used to automatically register your

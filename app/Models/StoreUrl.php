@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Hyn\Tenancy\Traits\UsesTenantConnection;
+
 class StoreUrl extends Model
 {
-    use HasFactory;
+    use HasFactory, UsesTenantConnection;
 
-    protected $fillable = [
-        "store_id",
-        "url"
-    ];
+    protected $fillable = ["url"];
 
     public function store()
     {
