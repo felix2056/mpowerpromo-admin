@@ -2,103 +2,38 @@
   "__plugin-vue_export-helper-c27b6911.js": {
     "file": "assets/_plugin-vue_export-helper-c27b6911.js"
   },
-  "_dataTables.select-7b173425.js": {
-    "file": "assets/dataTables.select-7b173425.js",
+  "_dataTables.select-738d58cd.js": {
+    "file": "assets/dataTables.select-738d58cd.js",
     "imports": [
       "resources/js/app.js"
     ]
   },
-  "_notification-8cc65fa4.js": {
-    "file": "assets/notification-8cc65fa4.js",
+  "_notification-7d49be3c.js": {
+    "file": "assets/notification-7d49be3c.js",
     "imports": [
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
     ]
   },
-  "_vue-multiselect.esm-7bd10f2f.js": {
-    "file": "assets/vue-multiselect.esm-7bd10f2f.js",
+  "_vue-multiselect.esm-79a774a0.js": {
+    "file": "assets/vue-multiselect.esm-79a774a0.js",
     "imports": [
       "resources/js/app.js"
     ]
-  },
-  "public/fonts/ionicons/ionicons.svg": {
-    "file": "assets/ionicons-620e8e32.svg",
-    "src": "public/fonts/ionicons/ionicons.svg"
-  },
-  "public/fonts/ionicons/ionicons.ttf": {
-    "file": "assets/ionicons-f4c1c322.ttf",
-    "src": "public/fonts/ionicons/ionicons.ttf"
-  },
-  "public/fonts/ionicons/ionicons.woff": {
-    "file": "assets/ionicons-33411f93.woff",
-    "src": "public/fonts/ionicons/ionicons.woff"
-  },
-  "public/fonts/line-awesome/la-brands-400.eot": {
-    "file": "assets/la-brands-400-c0e32387.eot",
-    "src": "public/fonts/line-awesome/la-brands-400.eot"
-  },
-  "public/fonts/line-awesome/la-brands-400.svg": {
-    "file": "assets/la-brands-400-af7a9c33.svg",
-    "src": "public/fonts/line-awesome/la-brands-400.svg"
-  },
-  "public/fonts/line-awesome/la-brands-400.ttf": {
-    "file": "assets/la-brands-400-fbc98702.ttf",
-    "src": "public/fonts/line-awesome/la-brands-400.ttf"
-  },
-  "public/fonts/line-awesome/la-brands-400.woff": {
-    "file": "assets/la-brands-400-14c63377.woff",
-    "src": "public/fonts/line-awesome/la-brands-400.woff"
-  },
-  "public/fonts/line-awesome/la-brands-400.woff2": {
-    "file": "assets/la-brands-400-ff70c9bc.woff2",
-    "src": "public/fonts/line-awesome/la-brands-400.woff2"
-  },
-  "public/fonts/line-awesome/la-regular-400.eot": {
-    "file": "assets/la-regular-400-7dc456f0.eot",
-    "src": "public/fonts/line-awesome/la-regular-400.eot"
-  },
-  "public/fonts/line-awesome/la-regular-400.svg": {
-    "file": "assets/la-regular-400-8606b583.svg",
-    "src": "public/fonts/line-awesome/la-regular-400.svg"
-  },
-  "public/fonts/line-awesome/la-regular-400.ttf": {
-    "file": "assets/la-regular-400-4b6ab8d0.ttf",
-    "src": "public/fonts/line-awesome/la-regular-400.ttf"
-  },
-  "public/fonts/line-awesome/la-regular-400.woff": {
-    "file": "assets/la-regular-400-7711fabc.woff",
-    "src": "public/fonts/line-awesome/la-regular-400.woff"
-  },
-  "public/fonts/line-awesome/la-regular-400.woff2": {
-    "file": "assets/la-regular-400-51ca2c00.woff2",
-    "src": "public/fonts/line-awesome/la-regular-400.woff2"
-  },
-  "public/fonts/line-awesome/la-solid-900.eot": {
-    "file": "assets/la-solid-900-8a57f8a9.eot",
-    "src": "public/fonts/line-awesome/la-solid-900.eot"
-  },
-  "public/fonts/line-awesome/la-solid-900.svg": {
-    "file": "assets/la-solid-900-36bf86c3.svg",
-    "src": "public/fonts/line-awesome/la-solid-900.svg"
-  },
-  "public/fonts/line-awesome/la-solid-900.ttf": {
-    "file": "assets/la-solid-900-07ce3559.ttf",
-    "src": "public/fonts/line-awesome/la-solid-900.ttf"
-  },
-  "public/fonts/line-awesome/la-solid-900.woff": {
-    "file": "assets/la-solid-900-a0d21b2a.woff",
-    "src": "public/fonts/line-awesome/la-solid-900.woff"
-  },
-  "public/fonts/line-awesome/la-solid-900.woff2": {
-    "file": "assets/la-solid-900-10a68e01.woff2",
-    "src": "public/fonts/line-awesome/la-solid-900.woff2"
   },
   "resources/css/app.css": {
     "file": "assets/app-4ed993c7.js",
     "isEntry": true,
     "src": "resources/css/app.css"
   },
+  "resources/js/app.css": {
+    "file": "assets/app-014d1ede.css",
+    "src": "resources/js/app.css"
+  },
   "resources/js/app.js": {
+    "css": [
+      "assets/app-014d1ede.css"
+    ],
     "dynamicImports": [
       "resources/js/components/Login.vue",
       "resources/js/components/Dashboard.vue",
@@ -120,14 +55,14 @@
       "resources/js/components/stores/Create.vue",
       "resources/js/components/Suppliers.vue"
     ],
-    "file": "assets/app-57257bd6.js",
+    "file": "assets/app-a6249904.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },
   "resources/js/components/Dashboard.vue": {
-    "file": "assets/Dashboard-e94b6cbe.js",
+    "file": "assets/Dashboard-737197e1.js",
     "imports": [
-      "_notification-8cc65fa4.js",
+      "_notification-7d49be3c.js",
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
     ],
@@ -135,7 +70,7 @@
     "src": "resources/js/components/Dashboard.vue"
   },
   "resources/js/components/Login.vue": {
-    "file": "assets/Login-3498e78e.js",
+    "file": "assets/Login-7be24e86.js",
     "imports": [
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
@@ -144,7 +79,7 @@
     "src": "resources/js/components/Login.vue"
   },
   "resources/js/components/Orders.vue": {
-    "file": "assets/Orders-29f6735a.js",
+    "file": "assets/Orders-9dd35015.js",
     "imports": [
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
@@ -153,7 +88,7 @@
     "src": "resources/js/components/Orders.vue"
   },
   "resources/js/components/Products.vue": {
-    "file": "assets/Products-dd9c6481.js",
+    "file": "assets/Products-03e72d59.js",
     "imports": [
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
@@ -162,7 +97,7 @@
     "src": "resources/js/components/Products.vue"
   },
   "resources/js/components/Proofs.vue": {
-    "file": "assets/Proofs-8ffcf41e.js",
+    "file": "assets/Proofs-7b3ef1a8.js",
     "imports": [
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
@@ -171,7 +106,7 @@
     "src": "resources/js/components/Proofs.vue"
   },
   "resources/js/components/Reports.vue": {
-    "file": "assets/Reports-d5e332f9.js",
+    "file": "assets/Reports-4f8d2087.js",
     "imports": [
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
@@ -180,7 +115,7 @@
     "src": "resources/js/components/Reports.vue"
   },
   "resources/js/components/Suppliers.vue": {
-    "file": "assets/Suppliers-979cba39.js",
+    "file": "assets/Suppliers-6a506b38.js",
     "imports": [
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
@@ -189,9 +124,9 @@
     "src": "resources/js/components/Suppliers.vue"
   },
   "resources/js/components/companies/Create.vue": {
-    "file": "assets/Create-c547022c.js",
+    "file": "assets/Create-5b31d572.js",
     "imports": [
-      "_notification-8cc65fa4.js",
+      "_notification-7d49be3c.js",
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
     ],
@@ -199,9 +134,9 @@
     "src": "resources/js/components/companies/Create.vue"
   },
   "resources/js/components/companies/Show.vue": {
-    "file": "assets/Show-9aa0f903.js",
+    "file": "assets/Show-946acba6.js",
     "imports": [
-      "_notification-8cc65fa4.js",
+      "_notification-7d49be3c.js",
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
     ],
@@ -209,9 +144,9 @@
     "src": "resources/js/components/companies/Show.vue"
   },
   "resources/js/components/customers/All.vue": {
-    "file": "assets/All-f752a467.js",
+    "file": "assets/All-fb15013f.js",
     "imports": [
-      "_dataTables.select-7b173425.js",
+      "_dataTables.select-738d58cd.js",
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
     ],
@@ -226,9 +161,9 @@
     "css": [
       "assets/Companies-ebd15a83.css"
     ],
-    "file": "assets/Companies-c6cf70c9.js",
+    "file": "assets/Companies-5332def6.js",
     "imports": [
-      "_dataTables.select-7b173425.js",
+      "_dataTables.select-738d58cd.js",
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
     ],
@@ -236,10 +171,10 @@
     "src": "resources/js/components/customers/Companies.vue"
   },
   "resources/js/components/customers/Create.vue": {
-    "file": "assets/Create-086fd510.js",
+    "file": "assets/Create-95ece04e.js",
     "imports": [
-      "_notification-8cc65fa4.js",
-      "_vue-multiselect.esm-7bd10f2f.js",
+      "_notification-7d49be3c.js",
+      "_vue-multiselect.esm-79a774a0.js",
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
     ],
@@ -247,7 +182,7 @@
     "src": "resources/js/components/customers/Create.vue"
   },
   "resources/js/components/customers/Emails.vue": {
-    "file": "assets/Emails-d48ee457.js",
+    "file": "assets/Emails-2d8a9c9f.js",
     "imports": [
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
@@ -256,7 +191,7 @@
     "src": "resources/js/components/customers/Emails.vue"
   },
   "resources/js/components/customers/Followups.vue": {
-    "file": "assets/Followups-9cc29f37.js",
+    "file": "assets/Followups-08806508.js",
     "imports": [
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
@@ -265,9 +200,9 @@
     "src": "resources/js/components/customers/Followups.vue"
   },
   "resources/js/components/customers/Index.vue": {
-    "file": "assets/Index-3ff70654.js",
+    "file": "assets/Index-aea16709.js",
     "imports": [
-      "_notification-8cc65fa4.js",
+      "_notification-7d49be3c.js",
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
     ],
@@ -275,7 +210,7 @@
     "src": "resources/js/components/customers/Index.vue"
   },
   "resources/js/components/customers/Presentations.vue": {
-    "file": "assets/Presentations-5b02ccdc.js",
+    "file": "assets/Presentations-400a48b9.js",
     "imports": [
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
@@ -284,10 +219,10 @@
     "src": "resources/js/components/customers/Presentations.vue"
   },
   "resources/js/components/stores/Create.vue": {
-    "file": "assets/Create-c79014ae.js",
+    "file": "assets/Create-00a00ea0.js",
     "imports": [
-      "_notification-8cc65fa4.js",
-      "_vue-multiselect.esm-7bd10f2f.js",
+      "_notification-7d49be3c.js",
+      "_vue-multiselect.esm-79a774a0.js",
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
     ],
@@ -295,50 +230,22 @@
     "src": "resources/js/components/stores/Create.vue"
   },
   "resources/js/components/stores/Index.vue": {
-    "file": "assets/Index-54b23d79.js",
+    "file": "assets/Index-a39267f2.js",
     "imports": [
-      "_notification-8cc65fa4.js",
-      "_vue-multiselect.esm-7bd10f2f.js",
+      "_notification-7d49be3c.js",
+      "_vue-multiselect.esm-79a774a0.js",
       "resources/js/app.js",
       "__plugin-vue_export-helper-c27b6911.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/components/stores/Index.vue"
   },
-  "resources/js/components/stores/single/Index.css": {
-    "file": "assets/Index-cff62006.css",
-    "src": "resources/js/components/stores/single/Index.css"
-  },
   "resources/js/components/stores/single/Index.vue": {
-    "assets": [
-      "assets/la-brands-400-c0e32387.eot",
-      "assets/la-brands-400-ff70c9bc.woff2",
-      "assets/la-brands-400-14c63377.woff",
-      "assets/la-brands-400-fbc98702.ttf",
-      "assets/la-brands-400-af7a9c33.svg",
-      "assets/la-regular-400-7dc456f0.eot",
-      "assets/la-regular-400-51ca2c00.woff2",
-      "assets/la-regular-400-7711fabc.woff",
-      "assets/la-regular-400-4b6ab8d0.ttf",
-      "assets/la-regular-400-8606b583.svg",
-      "assets/la-solid-900-8a57f8a9.eot",
-      "assets/la-solid-900-10a68e01.woff2",
-      "assets/la-solid-900-a0d21b2a.woff",
-      "assets/la-solid-900-07ce3559.ttf",
-      "assets/la-solid-900-36bf86c3.svg",
-      "assets/ionicons-f4c1c322.ttf",
-      "assets/ionicons-33411f93.woff",
-      "assets/ionicons-620e8e32.svg"
-    ],
-    "css": [
-      "assets/Index-cff62006.css"
-    ],
-    "file": "assets/Index-e5935aa2.js",
+    "file": "assets/Index-337505dc.js",
     "imports": [
       "resources/js/app.js",
-      "_notification-8cc65fa4.js",
-      "__plugin-vue_export-helper-c27b6911.js",
-      "_vue-multiselect.esm-7bd10f2f.js"
+      "_notification-7d49be3c.js",
+      "__plugin-vue_export-helper-c27b6911.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/components/stores/single/Index.vue"
