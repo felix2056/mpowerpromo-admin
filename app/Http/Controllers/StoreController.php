@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\DeployTenant;
 use App\Models\Category;
 use App\Models\CategoryType;
 use App\Models\HeadTag;
@@ -121,6 +122,15 @@ class StoreController extends Controller
             'errors' => ['password' => 'Password is incorrect']
         ], 422);
 
+        // prevent naming a store with a disallowed subdomain
+        $disallowed_subdomains = ['example', 'www', 'app', 'admin', 'administrator', 'root', 'mail', 'webmail', 'email', 'blog', 'support', 'help', 'faq', 'billing', 'client', 'clients', 'contact', 'api', 'cdn', 'dev', 'developer', 'developers', 'devs', 'download', 'downloads', 'forum', 'forums', 'git', 'irc', 'wiki', 'staff', 'store', 'stores', 'shop', 'shopping', 'stage', 'staging', 'status', 'stats', 'static', 'beta', 'test', 'tests', 'blog', 'blogs', 'news', 'chat', 'chatting', 'buy', 'purchase', 'demo', 'download', 'downloads', 'login', 'logins', 'logout', 'logs', 'signup', 'signups', 'signin', 'signins', 'signout', 'signouts', 'subscribe', 'subscribes', 'unsubscribe', 'unsubscribes', 'uploads', 'videos', 'images', 'img', 'assets', 'media', 'files', 'file', 'javascript', 'js', 'css', 'fonts', 'font', 'maps', 'map', 'music', 'sound', 'sounds', 'podcast', 'podcasts', 'podcasting', 'podcastings', 'rss', 'feed', 'feeds', 'sitemap', 'sitemaps', 'xml', 'json', 'txt', 'pdf', 'doc', 'docs', 'docx', 'xls', 'xlsx', 'csv', 'ppt', 'pptx', 'zip', 'rar', 'tar', 'gzip', 'gz', '7z', 'iso', 'exe', 'bin', 'mp3', 'mp4', 'avi', 'mpeg', 'wav', 'mov', 'wmv', 'swf', 'flv', 'apk', 'dmg', 'psd', 'ai', 'eps', 'ps', 'ttf', 'otf', 'woff', 'woff2', 'eot', 'svg', 'svgz', 'ico', 'webp', 'cur', 'tif', 'tiff', 'bmp', 'xcf', 'odt', 'ods', 'odp', 'pages', 'key', 'numbers', '3gp', '3g2', 'asf', 'asx'];
+        if (in_array($request->subdomain, $disallowed_subdomains)) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => ['subdomain' => 'This subdomain is not allowed']
+            ], 422);
+        }
+
         // check if website and hostname already exists
         $website = Website::where('uuid', $request->subdomain . '.' . $request->domain)->first();
         $hostname = Hostname::where('fqdn', $request->subdomain . '.' . $request->domain)->first();
@@ -185,14 +195,20 @@ class StoreController extends Controller
         // create pages
         $this->createPages();
 
-        // create store head tags
-        $this->createHeadTags($store);
-
         // create store category types
         $this->createCategoryTypes();
 
         // switch back to the central (default) database
         app(Environment::class)->tenant();
+
+        // call artisan command to start the queue worker
+        Artisan::call('queue:work', [
+            '--queue' => 'deploy-tenant-store',
+            '--stop-when-empty' => true,
+        ]);
+        
+        // dispatch the job to deploy the store website to the main domain
+        DeployTenant::dispatch($website->uuid, $user->id, $request->password)->onQueue('deploy-tenant-store');
 
         return response()->json([
             'message' => 'Successfully created store',
@@ -386,6 +402,8 @@ class StoreController extends Controller
             'button_border_radius_sm' => '.2rem',
             'button_border_radius_lg' => '.3rem',
         ]);
+
+        $this->createHeadTags($store, $theme);
     }
 
     protected function createPages()
@@ -587,7 +605,7 @@ class StoreController extends Controller
         ]);
     }
 
-    protected function createHeadTags($store)
+    protected function createHeadTags($store, $theme)
     {
         $head_tag = HeadTag::create();
 
@@ -614,7 +632,8 @@ class StoreController extends Controller
                 'type' => 'is_external',
             ],
             [
-                'href' => config('app.url') . '/css/stores/' . $store->slug . '/' . $head_tag->theme->css_file,
+                'href' => config('app.url') . '/css/stores/' . $store->slug . '/' . $theme->css_file,
+                'rel' => 'stylesheet',
                 'description' => 'Bootstrap Theme',
             ]
         ]);

@@ -585,7 +585,7 @@ export default {
 
             axios.post('/stores/create', this.store)
             .then(response => {
-                this.$router.push({ name: 'store', params: { slug: response.data.store.slug } });
+                this.$router.push({ name: 'store', params: { slug: response.data.store.host } });
             })
             .catch(error => {
                 this.errorMsg = error.response.data.message;

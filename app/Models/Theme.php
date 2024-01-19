@@ -53,7 +53,7 @@ class Theme extends Model
         return $this->hasMany(ThemeTypography::class);
     }
 
-    public function getCssFileAttribute()
+    public function getCssFileUrlAttribute()
     {
         return '/css/theme/' . $this->attributes['id'] . '/' . $this->attributes['css_file'];
     }

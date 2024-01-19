@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Store;
 use App\Models\Theme;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -49,6 +50,11 @@ class StoreThemeController extends Controller
 
     public function colorSystem(Request $request)
     {
+        $store = Store::first();
+        if (!$store) return response()->json([
+            'message' => 'Store not found.'
+        ], 404);
+
         $theme = Theme::first();
         if (!$theme) $theme = Theme::create();
 
@@ -86,8 +92,8 @@ class StoreThemeController extends Controller
             $color->save();
 
             $scss_path = resource_path('js/components/assets/scss/theme.scss');
-            $css_path = public_path('css/theme/' . $theme->id);
-            $css_compile_path = public_path('css/theme/app.css');
+            $css_path = public_path('css/stores/' . $store->slug);
+            $css_compile_path = public_path('css/stores/app.css');
             
             // delete the old SCSS & CSS compile files
             if (file_exists($scss_path)) unlink($scss_path);
