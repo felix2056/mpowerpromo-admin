@@ -380,7 +380,7 @@ export default {
             validationErrors: {},
 
             countries: [],
-            domains: ['mpowerpromo.localhost'],
+            domains: ['mpowerpromo.localhost', 'thesqueegeeshop.com'],
 
             store: {
                 name: '',
