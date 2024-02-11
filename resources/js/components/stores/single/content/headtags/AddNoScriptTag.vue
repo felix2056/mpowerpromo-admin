@@ -8,7 +8,9 @@
                         <div>
                             <div class="form-group"><!---->
                                 <div><!---->
-                                    <div><label class="cursor-pointer">Description</label><!----><!---->
+                                    <div>
+                                        <label class="cursor-pointer">Description</label>
+                                        <!----><!---->
                                         <div>
                                             <div class="">
                                                 <div>
@@ -17,19 +19,30 @@
                                                         <div class="col-4"><!----></div>
                                                         <div class="col-4"><!----></div>
                                                     </div><!---->
-                                                    <div class="d-flex"><input minlength="-Infinity" autofocus="autofocus"
+                                                    <div class="d-flex">
+                                                        <input v-model="noscript_tag.description" minlength="-Infinity" autofocus="autofocus"
                                                             autocomplete="temp" type="text" id="advanced-input-39"
                                                             placeholder="" data-mask="" data-previous-value=""
-                                                            class="form-control"><!----><!----></div>
+                                                            class="form-control">
+                                                        <i class="fas fa-exclamation-circle text-danger ml-2" v-if="validationErrors.description"></i>
+                                                    </div>
+                                                    <div class="invalid-feedback d-block" v-if="validationErrors.description">
+                                                        <p v-for="error in validationErrors.description" :key="error">
+                                                            {{ error }}
+                                                        </p>
+                                                    </div>
                                                 </div><!----><!---->
                                             </div><!---->
                                         </div>
                                     </div><!---->
                                 </div>
                             </div>
+
                             <div class="form-group"><!---->
                                 <div><!---->
-                                    <div><label class="cursor-pointer">Inner HTML</label><!----><!---->
+                                    <div>
+                                        <label class="cursor-pointer">Inner HTML</label>
+                                        <!----><!---->
                                         <div>
                                             <div class="">
                                                 <div>
@@ -38,10 +51,18 @@
                                                         <div class="col-4"><!----></div>
                                                         <div class="col-4"><!----></div>
                                                     </div><!---->
-                                                    <div class="d-flex"><input minlength="-Infinity" autofocus="autofocus"
+                                                    <div class="d-flex">
+                                                        <input minlength="-Infinity" autofocus="autofocus"
                                                             autocomplete="temp" type="text" id="advanced-input-41"
                                                             placeholder="" data-mask="" data-previous-value=""
-                                                            class="form-control"><!----><!----></div>
+                                                            class="form-control">
+                                                        <i class="fas fa-exclamation-circle text-danger ml-2" v-if="validationErrors.inner_html"></i>
+                                                    </div>
+                                                    <div class="invalid-feedback d-block" v-if="validationErrors.inner_html">
+                                                        <p v-for="error in validationErrors.inner_html" :key="error">
+                                                            {{ error }}
+                                                        </p>
+                                                    </div>
                                                 </div><!----><!---->
                                             </div><!---->
                                         </div>
@@ -75,6 +96,10 @@ export default {
         head_tag: {
             type: Object,
             required: true
+        },
+        is_editing: {
+            type: Object,
+            required: false
         }
     },
 
@@ -82,8 +107,9 @@ export default {
         return {
             isLoading: false,
             validationErrors: {},
+            errorMsg: '',
 
-            add_noscript_tag: {
+            noscript_tag: {
                 description: '',
                 inner_html: ''
             }
@@ -95,27 +121,122 @@ export default {
             store: 'userstore/store',
         })
     },
+
+    // watch noscript_tag.description and noscript_tag.inner_html
+    watch: {
+        'noscript_tag.description': function (val) {
+            if (val.length > 0) {
+                this.validationError.description = []
+            }
+        },
+        'noscript_tag.inner_html': function (val) {
+            if (val.length > 0) {
+                this.validationError.inner_html = []
+            }
+        }
+    },
+
+    created() {
+        if (Object.keys(this.is_editing).length) {
+            this.noscript_tag = this.is_editing
+        }
+    },
     
     methods: {
+        resolveAction() {
+            if (Object.keys(this.is_editing).length) {
+                this.updateTag()
+            } else {
+                this.addTag()
+            }
+        },
+
         addTag() {
+            // validate the form
+            this.validationErrors = {}
+
+            if (this.noscript_tag.description.length === 0) {
+                this.validationErrors.description = ['The description field is required.']
+            }
+
+            if (this.noscript_tag.inner_html.length === 0) {
+                this.validationErrors.inner_html = ['The inner html field is required.']
+            }
+
+            if (Object.keys(this.validationErrors).length > 0) {
+                return
+            }
+
             this.isLoading = true
 
-            axios.post(`/stores/head-tags/noscript/create`, this.add_noscript_tag, {
+            axios.post(`/stores/head-tags/noscript/create`, this.noscript_tag, {
                 headers: {
                     'X-Tenant-UUID': this.store.host
                 }
             })
             .then(response => {
-                this.isLoading = false
+                this.noscript_tag = {
+                    description: '',
+                    inner_html: ''
+                }
+
                 this.$emit('tagAdded', response.data.noscript_tag)
+                this.closeTag()
             })
             .catch(error => {
-                this.isLoading = false
-                this.validationErrors = error.response.data.errors
+                if (error.response.status === 422) {
+                    this.validationErrors = error.response.data.errors
+                } else {
+                    this.errorMsg = error.response.data.message
+                }
             })
+            .finally(() => this.isLoading = false)
+        },
+
+        updateTag() {
+            // validate the form
+            this.validationErrors = {}
+
+            if (this.noscript_tag.description.length === 0) {
+                this.validationErrors.description = ['The description field is required.']
+            }
+
+            if (this.noscript_tag.inner_html.length === 0) {
+                this.validationErrors.inner_html = ['The inner html field is required.']
+            }
+
+            if (Object.keys(this.validationErrors).length > 0) {
+                return
+            }
+
+            this.isLoading = true
+
+            axios.post(`/stores/head-tags/noscript/update`, this.noscript_tag, {
+                headers: {
+                    'X-Tenant-UUID': this.store.host
+                }
+            })
+            .then(response => {
+                this.$emit('tagUpdated', response.data.noscript_tag)
+                this.closeTag()
+            })
+            .catch(error => {
+                if (error.response.status === 422) {
+                    this.validationErrors = error.response.data.errors
+                } else {
+                    this.errorMsg = error.response.data.message
+                }
+            })
+            .finally(() => this.isLoading = false)
+        },
+
+        reloadIframe() {
+            let iframe = document.getElementById('storeEditorIframe');
+            iframe.src = iframe.src;
         },
 
         closeTag() {
+            this.reloadIframe()
             this.$emit('closeTag')
         }
     }

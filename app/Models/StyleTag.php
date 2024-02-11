@@ -24,6 +24,6 @@ class StyleTag extends Model
 
     public function getTagTypeAttribute()
     {
-        return 'style';
+        return 'Style';
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HeadTag;
 use App\Models\Store;
 use App\Models\Theme;
 use Illuminate\Support\Str;
@@ -16,9 +17,14 @@ class StoreThemeController extends Controller
         $theme = Theme::first();
         if (!$theme) $theme = Theme::create();
 
+        $head_tag = HeadTag::with(['linkTags' => function ($query) {
+            $query->where('is_bootstrap', true);
+        }])->first();
+        
         return response()->json([
             'message' => 'Successfully retrieved theme.',
-            'theme' => $theme
+            'theme' => $theme,
+            'head_tag' => $head_tag
         ]);
     }
 
@@ -103,21 +109,30 @@ class StoreThemeController extends Controller
 
             // if the newly SCSS file exists, run the compile-scss npm script
             if (file_exists($scss_path)) {
-                // pass the hash to the npm script so that the compiled CSS file can be moved to the public/css/generated folder with a hashed filename
                 exec('npm run compile-scss');
 
-                // delete the old CSS file
-                if (file_exists($css_path . '/app.css')) unlink($css_path . '/app.css');
+                // delete the old CSS path
+                if (file_exists($css_path)) File::deleteDirectory($css_path);
+                
+                // create a new CSS path
+                mkdir($css_path, 0777, true);
 
-                // make the theme folder if it doesn't exist
-                if (!file_exists($css_path)) mkdir($css_path, 0777, true);
-
-                // move the compiled CSS file to the public/css/generated folder with a hashed filename
+                // move the compiled CSS file to the new CSS path
                 $filename = 'theme-' . $hash . '.css';
                 File::move($css_compile_path, $css_path . '/' . $filename);
 
                 $theme->css_file = $filename;
                 $theme->save();
+
+                // update the theme head tag > link tag
+                $head_tag = HeadTag::first();
+                if ($head_tag) {
+                    $link_tag = $head_tag->linkTags()->where('is_bootstrap', true)->first();
+                    if ($link_tag) {
+                        $link_tag->href = config('app.url') . '/css/stores/' . $store->slug . '/' . $filename;
+                        $link_tag->save();
+                    }
+                }
 
                 return response()->json([
                     'message' => 'Successfully updated color system.'

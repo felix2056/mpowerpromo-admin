@@ -65,6 +65,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
                 Route::post('no-script/create', 'StoreHeadTagController@createNoScriptTag')->name('stores.head-tags.no-script.create');
                 Route::post('style/create', 'StoreHeadTagController@createStyleTag')->name('stores.head-tags.style.create');
                 Route::post('title/create', 'StoreHeadTagController@createTitleTag')->name('stores.head-tags.title.create');
+
+                Route::post('meta/update', 'StoreHeadTagController@updateMetaTag')->name('stores.head-tags.meta.update');
+                Route::post('link/update', 'StoreHeadTagController@updateLinkTag')->name('stores.head-tags.link.update');
+                Route::post('script/update', 'StoreHeadTagController@updateScriptTag')->name('stores.head-tags.script.update');
+                Route::post('no-script/update', 'StoreHeadTagController@updateNoScriptTag')->name('stores.head-tags.no-script.update');
+                Route::post('style/update', 'StoreHeadTagController@updateStyleTag')->name('stores.head-tags.style.update');
+                Route::post('title/update', 'StoreHeadTagController@updateTitleTag')->name('stores.head-tags.title.update');
             });
 
             Route::group(['prefix' => 'media'], function () {
@@ -80,6 +87,24 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
                 Route::match(['get', 'post'], 'options', 'StoreThemeController@optionSetting')->name('stores.theme.options');
                 Route::match(['get', 'post'], 'typography', 'StoreThemeController@typographySetting')->name('stores.theme.typography');
             });
+        });
+    });
+
+    Route::group(['prefix' => 'suppliers'], function () {
+        Route::get('', 'SupplierController@index')->name('suppliers.index');
+        Route::get('/single/{slug}', 'SupplierController@show')->name('suppliers.show');
+        Route::post('create', 'xxxxxxxxxxxxxxxxxx@xxxxx')->name('suppliers.store');
+
+        Route::group(['prefix' => 'endpoints'], function () {
+            Route::get('', 'xxxxxxxxxxxxxxxxxxxxxxxxxx@xxxxx')->name('suppliers.endpoints.index');
+            Route::get('{slug}', 'xxxxxxxxxxxxxxxxxxxxxxxxxx@xxxx')->name('suppliers.endpoints.show');
+            Route::post('create', 'xxxxxxxxxxxxxxxxxxxxxxxxxx@xxxxx')->name('suppliers.endpoints.store');
+        });
+
+        Route::group(['prefix' => 'contacts'], function () {
+            Route::get('', 'xxxxxxxxxxxxxxxxxxxxxxxxx@xxxxx')->name('suppliers.contacts.index');
+            Route::get('{slug}', 'xxxxxxxxxxxxxxxxxxxxxxxxx@xxxx')->name('suppliers.contacts.show');
+            Route::post('create', 'xxxxxxxxxxxxxxxxxxxxxxxxx@xxxxx')->name('suppliers.contacts.store');
         });
     });
 });

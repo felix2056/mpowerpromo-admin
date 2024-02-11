@@ -22,8 +22,18 @@ class LinkTag extends Model
         return $this->belongsTo(HeadTag::class);
     }
 
+    public function getIsExternalAttribute()
+    {
+        return $this->attributes['is_external'] === 1;
+    }
+
+    public function getIsInlineAttribute()
+    {
+        return $this->attributes['is_inline'] === 1;
+    }
+
     public function getTagTypeAttribute()
     {
-        return 'link';
+        return 'Link';
     }
 }

@@ -11,7 +11,7 @@
             </nav>
         </div>
 
-        <component v-if="active_tag" :is="active_tag" :head_tag="head_tag" @closeTag="active_tag = null" @tagAdded="fetchHeadTags" />
+        <component v-if="active_tag" :is="active_tag" :head_tag="head_tag" :is_editing="editing_tag" @closeTag="active_tag = null" @tagAdded="fetchHeadTags" @tagUpdated="fetchHeadTags" />
         <div v-else class="mt-3">
             <h3>Tag Management</h3>
             <div class="row">
@@ -84,12 +84,12 @@
                                     <li v-for="(tag, index) in all_tags" :key="index" class="list-group-item d-flex justify-content-between align-items-center">
                                         <div>
                                             <div class="small">{{ tag.tag_type }}</div>
-                                            <a data-toggle="dropdown">
-                                                <a>{{ tag.description }}</a>
+                                            <a @click="editTag(tag.id, tag.tag_type)">
+                                                <span>{{ tag.description }}</span>
                                             </a>
                                         </div>
-                                        <div>
-                                            <a @click="deleteTag(tag.id)" class="dropdown-item">
+                                        <div v-if="!tag.is_bootstrap">
+                                            <a @click="deleteTag(tag.id, tag.tag_type)" class="dropdown-item">
                                                 <span><i class="far fa-trash"></i></span>
                                             </a>
                                         </div>
@@ -139,13 +139,14 @@ export default {
             isLoading: false,
             validationErrors: {},
             active_tag: null,
+            editing_tag: {},
 
             head_tag: {
                 gtm_id: '',
                 meta_tags: [],
                 link_tags: [],
                 script_tags: [],
-                noscript_tags: [],
+                no_script_tags: [],
                 style_tags: [],
                 title_tags: []
             }
@@ -158,14 +159,34 @@ export default {
         }),
 
         all_tags() {
-            return [
-                ...this.head_tag.meta_tags,
-                ...this.head_tag.link_tags,
-                ...this.head_tag.script_tags,
-                ...this.head_tag.noscript_tags,
-                ...this.head_tag.style_tags,
-                ...this.head_tag.title_tags
-            ]
+            // return tags that are not empty
+            let tags = []
+            
+            if (this.head_tag.meta_tags.length > 0) {
+                tags = tags.concat(this.head_tag.meta_tags)
+            }
+
+            if (this.head_tag.link_tags.length > 0) {
+                tags = tags.concat(this.head_tag.link_tags)
+            }
+
+            if (this.head_tag.script_tags.length > 0) {
+                tags = tags.concat(this.head_tag.script_tags)
+            }
+
+            if (this.head_tag.no_script_tags.length > 0) {
+                tags = tags.concat(this.head_tag.no_script_tags)
+            }
+
+            if (this.head_tag.style_tags.length > 0) {
+                tags = tags.concat(this.head_tag.style_tags)
+            }
+
+            if (this.head_tag.title_tags.length > 0) {
+                tags = tags.concat(this.head_tag.title_tags)
+            }
+
+            return tags
         },
     },
 
@@ -183,7 +204,7 @@ export default {
                 }
             })
             .then(response => {
-                this.store.head_tag = response.data.head_tag
+                this.head_tag = response.data.head_tag
             })
             .catch(error => console.log(error))
             .finally(() => this.isLoading = false)
@@ -193,8 +214,22 @@ export default {
             this.active_tag = 'Add' + tag_type + 'Tag'
         },
 
+        editTag(tag_id, tag_type) {
+            let tag = this.all_tags.find(tag => tag.id == tag_id && tag.tag_type == tag_type)
+
+            if (!tag) return
+
+            this.editing_tag = tag
+            this.active_tag = 'Add' + tag.tag_type + 'Tag'
+        },
+
         deleteTag(tag_id, tag_type) {
-            axios.delete('/stores/head-tags/' + tag_type + '/' + tag_id, {
+            let tag = this.all_tags.find(tag => tag.id == tag_id && tag.tag_type == tag_type)
+
+            if (!tag) return
+            if (!confirm('Are you sure you want to delete this tag?')) return
+            
+            axios.delete('/stores/head-tags/' + tag.tag_type + '/' + tag_id, {
                 headers: {
                     'X-Tenant-UUID': this.store.host
                 }

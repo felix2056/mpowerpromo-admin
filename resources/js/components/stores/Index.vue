@@ -125,7 +125,7 @@ export default {
   data() {
     return {
       isLoading: false,
-      isLoadingContries: false,
+      isLoadingCountries: false,
       isUploading: false,
       shouldCompress: true,
       errorMsg: null,

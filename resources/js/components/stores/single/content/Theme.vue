@@ -614,7 +614,8 @@ export default {
             isLoadingIframe: false,
             validationErrors: {},
 
-            theme: {}
+            theme: {},
+            head_tag: {}
         }
     },
 
@@ -639,16 +640,25 @@ export default {
             });
         
             this.theme = data.theme;
+            this.head_tag = data.head_tag;
 
-            // embed css link tag into iframe head
-            const iframeHead = this.$refs.bootstrapIframe.contentDocument.head;
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = this.theme.css_file
-            iframeHead.appendChild(link);
+            if (this.head_tag.link_tags.length) {
+                this.head_tag.link_tags.forEach(link => {
+                    if (link.rel === 'stylesheet') {
+                        this.theme.css_file_path = link.href;
+                    }
+                });
 
-            // console.log(link)
+                // embed css link tag into iframe head
+                const iframeHead = this.$refs.bootstrapIframe.contentDocument.head;
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = this.theme.css_file_path
+                iframeHead.appendChild(link);
+                // console.log(link)
+            }
+
             this.isLoadingIframe = false;
         }
     }

@@ -13,16 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('link_tags', function (Blueprint $table) {
+        Schema::create('robots', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger("head_tag_id")->unsigned();
-            $table->string("href")->nullable();
-            $table->string("rel")->nullable();
-            $table->string("description")->nullable();
+            $table->string("path")->nullable();
             $table->text("content")->nullable();
-            $table->boolean("is_external",)->default(true);
-            $table->boolean("is_inline",)->default(false);
-            $table->boolean("is_bootstrap")->default(false);
+            $table->string("filename")->nullable();
+            $table->string("link")->nullable();
             $table->timestamps();
         });
     }
@@ -34,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('link_tags');
+        Schema::dropIfExists('robots');
     }
 };

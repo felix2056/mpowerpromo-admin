@@ -24,6 +24,6 @@ class ScriptTag extends Model
 
     public function getTagTypeAttribute()
     {
-        return 'script';
+        return 'Script';
     }
 }

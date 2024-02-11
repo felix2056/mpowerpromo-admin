@@ -24,6 +24,6 @@ class MetaTag extends Model
 
     public function getTagTypeAttribute()
     {
-        return 'meta';
+        return 'Meta';
     }
 }

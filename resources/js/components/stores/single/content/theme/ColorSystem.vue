@@ -74,6 +74,11 @@ export default {
 
                 // Iterate through each color object and set up individual watchers
                 newColors.forEach((newColor, index) => {
+                    // if watcher already exists, remove it
+                    // if (this._watchers[index]) {
+                    //     this._watchers[index].teardown();
+                    // }
+                    
                     this.$watch(
                         () => this.colors[index],
                         {

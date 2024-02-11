@@ -1,6 +1,7 @@
 <template>
     <iframe :src="store_url" name="thumbnails" frameborder="0"
         ref="storeEditorIframe"
+        id="storeEditorIframe"
         class="store-preview-iframe overlay"></iframe>
 </template>
 

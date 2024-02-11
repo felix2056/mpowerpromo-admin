@@ -130,14 +130,21 @@
                     Products
                 </h6>
                 <ul class="nav flex-column">
-                    <li><a class="nav-item nav-item-hover p-1 btn-block intro-store-products"><i
-                                class="fa-fw mx-2 far fa-tshirt"></i>
+                    <li>
+                        <a class="nav-item nav-item-hover p-1 btn-block intro-store-products">
+                            <i class="fa-fw mx-2 far fa-tshirt"></i>
                             Products
-                            <!----></a></li>
-                    <li><a class="nav-item nav-item-hover p-1 btn-block intro-store-suppliers"><i
-                                class="fa-fw mx-2 far fa-warehouse-alt fa-fw mr-2"></i>
+                            <!---->
+                        </a>
+                    </li>
+                    <li>
+                        <router-link :to="{ name: 'store', query: { tab: 'Suppliers' } }"
+                            class="nav-item nav-item-hover p-1 btn-block intro-store-suppliers">
+                            <i class="fa-fw mx-2 far fa-warehouse-alt fa-fw mr-2"></i>
                             Suppliers
-                            <!----></a></li>
+                            <!---->
+                        </router-link>
+                    </li>
                 </ul>
             </div>
             <div class="mb-4">
@@ -151,18 +158,29 @@
                             Product Feed
                             <i class="fas fa-circle fa-xs text-primary ml-1 position-absolute"></i></a>
                     </li>
-                    <li><a class="nav-item nav-item-hover p-1 btn-block intro-store-social-media"><i
-                                class="fa-fw mx-2 far fa-share fa-fw"></i>
+                    <li>
+                        <router-link :to="{ name: 'store', query: { tab: 'SocialMedia' } }" 
+                            class="nav-item nav-item-hover p-1 btn-block intro-store-social-media">
+                            <i class="fa-fw mx-2 far fa-share fa-fw"></i>
                             Social Media
-                            <!----></a></li>
-                    <li><a class="nav-item nav-item-hover p-1 btn-block intro-store-robots"><i
-                                class="fa-fw mx-2 far fa-robot"></i>
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{ name: 'store', query: { tab: 'Robots' } }" 
+                            class="nav-item nav-item-hover p-1 btn-block intro-store-robots">
+                            <i class="fa-fw mx-2 far fa-robot"></i>
                             Robots.txt
-                            <!----></a></li>
-                    <li><a class="nav-item nav-item-hover p-1 btn-block intro-store-sitemaps"><i
-                                class="fa-fw mx-2 far fa-sitemap"></i>
+                            <!---->
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{ name: 'store', query: { tab: 'Sitemaps' } }"
+                             class="nav-item nav-item-hover p-1 btn-block intro-store-sitemaps">
+                             <i class="fa-fw mx-2 far fa-sitemap"></i>
                             Sitemaps
-                            <!----></a></li>
+                            <!---->
+                        </router-link>
+                    </li>
                 </ul>
             </div>
             <div class="mb-4">
@@ -273,6 +291,12 @@ import Theme from './content/Theme.vue'
 // import Products from './products/Products.vue'
 import Suppliers from './products/Suppliers.vue'
 
+// marketing
+// import ProductFeed from './marketing/ProductFeed.vue'
+import SocialMedia from './marketing/SocialMedia.vue'
+import Robots from './marketing/Robots.vue'
+import Sitemaps from './marketing/Sitemaps.vue'
+
 export default {
     components: {
         Categories,
@@ -283,7 +307,12 @@ export default {
         Theme,
 
         // Products,
-        Suppliers
+        Suppliers,
+
+        // ProductFeed,
+        SocialMedia,
+        Robots,
+        Sitemaps
     },
 
     data() {
@@ -305,7 +334,11 @@ export default {
             if (this.componentToShow === 'Categories' ||
                 this.componentToShow === 'HeadTags' ||
                 this.componentToShow === 'Media' ||
-                this.componentToShow === 'Theme'
+                this.componentToShow === 'Theme' ||
+                this.componentToShow === 'SocialMedia' || 
+                this.componentToShow === 'Robots' || 
+                this.componentToShow === 'Sitemaps' ||
+                this.componentToShow === 'Suppliers'
             ) { return 'col-12'; }
     
             return 'w-25';

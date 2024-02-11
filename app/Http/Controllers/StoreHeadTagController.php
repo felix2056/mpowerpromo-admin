@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\HeadTag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class StoreHeadTagController extends Controller
 {
@@ -93,6 +94,81 @@ class StoreHeadTagController extends Controller
         return response()->json([
             'message' => 'Successfully created title tag.',
             'title_tag' => $title_tag
+        ]);
+    }
+
+    public function updateMetaTag(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'tag_type' => 'required|string',
+            'id' => 'required|integer',
+            'hid' => 'string',
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'content' => 'required|string',
+            'property' => 'string',
+            'http_equiv' => 'string'
+        ]);
+
+        if ($validator->fails()) return response()->json([
+            'message' => 'Validation failed.',
+            'errors' => $validator->errors()
+        ], 422);
+
+        $head_tag = HeadTag::first();
+        if (!$head_tag) return response()->json([
+            'message' => 'Head tag not found.'
+        ], 404);
+
+        $meta_tag = $head_tag->metaTags()->find($request->id);
+        if (!$meta_tag) return response()->json([
+            'message' => 'Meta tag not found.'
+        ], 404);
+
+        unset($request['tag_type']);
+        $meta_tag->update($request->all());
+
+        return response()->json([
+            'message' => 'Successfully updated meta tag.',
+            'meta_tag' => $meta_tag
+        ]);
+    }
+
+    public function updateLinkTag(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'tag_type' => 'required|string',
+            'id' => 'required|integer',
+            'rel' => 'required|string',
+            'href' => 'string',
+            'content' => 'string',
+            'description' => 'required|string',
+            'is_external' => 'boolean',
+            'is_inline' => 'boolean',
+            'is_boostrap' => 'boolean'
+        ]);
+
+        if ($validator->fails()) return response()->json([
+            'message' => 'Validation failed.',
+            'errors' => $validator->errors()
+        ], 422);
+
+        $head_tag = HeadTag::first();
+        if (!$head_tag) return response()->json([
+            'message' => 'Head tag not found.'
+        ], 404);
+
+        $link_tag = $head_tag->linkTags()->find($request->id);
+        if (!$link_tag) return response()->json([
+            'message' => 'Link tag not found.'
+        ], 404);
+        
+        unset($request['tag_type']);
+        $link_tag->update($request->all());
+
+        return response()->json([
+            'message' => 'Successfully updated link tag.',
+            'link_tag' => $link_tag
         ]);
     }
 

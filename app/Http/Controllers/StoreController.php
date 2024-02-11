@@ -354,8 +354,11 @@ class StoreController extends Controller
         if (file_exists($scss_path)) {
             exec('npm run compile-scss');
 
-            // make the theme folder if it doesn't exist
-            if (!file_exists($css_path)) mkdir($css_path, 0777, true);
+            // delete the old CSS path
+            if (file_exists($css_path)) File::deleteDirectory($css_path);
+                
+            // create a new CSS path
+            mkdir($css_path, 0777, true);
 
             // move the compiled CSS file
             $filename = 'theme-' . $hash . '.css';
@@ -622,19 +625,18 @@ class StoreController extends Controller
             [
                 'href' => 'https://fa.mpowerpromo.com/css/all.css',
                 'rel' => 'stylesheet',
-                'description' => 'fontawesome.all.css',
-                'type' => 'is_external',
+                'description' => 'fontawesome.all.css'
             ],
             [
                 'href' => 'https://store-media.mpowerpromo.com/5e4ef2d67141a025da688296/assets/1591297900931.ico',
                 'rel' => 'icon',
                 'description' => 'favicon.io',
-                'type' => 'is_external',
             ],
             [
                 'href' => config('app.url') . '/css/stores/' . $store->slug . '/' . $theme->css_file,
                 'rel' => 'stylesheet',
                 'description' => 'Bootstrap Theme',
+                'is_bootstrap' => true,
             ]
         ]);
     }

@@ -24,6 +24,6 @@ class NoScriptTag extends Model
 
     public function getTagTypeAttribute()
     {
-        return 'noscript';
+        return 'NoScript';
     }
 }

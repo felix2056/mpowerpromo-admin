@@ -190,12 +190,30 @@ const router = createRouter({
         {
             path: '/suppliers',
             name: 'suppliers',
-            component: () => import('@/components/Suppliers.vue'),
+            component: () => import('@/components/suppliers/Index.vue'),
             meta: {
                 middleware: "auth",
                 title: `Suppliers`
             }
-        }
+        },
+        {
+            path: '/suppliers/:slug',
+            name: 'supplier',
+            component: () => import('@/components/suppliers/Show.vue'),
+            meta: {
+                middleware: "auth",
+                title: `Supplier`
+            }
+        },
+        // {
+        //     path: '/suppliers/create',
+        //     name: 'create-supplier',
+        //     component: () => import('@/components/suppliers/Create.vue'),
+        //     meta: {
+        //         middleware: "auth",
+        //         title: `Create Supplier`
+        //     }
+        // }
         // Add more routes here
     ],
     scrollBehavior (to, from, savedPosition) {

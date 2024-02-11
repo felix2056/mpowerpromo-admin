@@ -24,6 +24,6 @@ class TitleTag extends Model
 
     public function getTagTypeAttribute()
     {
-        return 'title';
+        return 'Title';
     }
 }
