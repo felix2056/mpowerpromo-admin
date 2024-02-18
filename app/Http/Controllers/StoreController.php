@@ -30,6 +30,7 @@ use Hyn\Tenancy\Models\Hostname;
 use Hyn\Tenancy\Contracts\Repositories\HostnameRepository;
 
 use Hyn\Tenancy\Environment;
+use Illuminate\Support\Facades\DB;
 
 class StoreController extends Controller
 {
@@ -141,82 +142,97 @@ class StoreController extends Controller
             ], 422);
         }
 
-        // create a new website (store) in the system
-        $website = new Website();
-        $website->uuid = $request->subdomain . '.' . $request->domain;
-        $website->managed_by_database_connection = 'system';
-        $website->managed_by_user_id = $user->id;
-        app(WebsiteRepository::class)->create($website);
+        try {
+            // create a new website (store) in the system
+            $website = new Website();
+            $website->uuid = $request->subdomain . '.' . $request->domain;
+            $website->managed_by_database_connection = 'system';
+            $website->managed_by_user_id = $user->id;
+            app(WebsiteRepository::class)->create($website);
 
-        // associate the website with a hostname
-        $hostname = new Hostname();
-        $hostname->fqdn = $website->uuid;
-        $hostname = app(HostnameRepository::class)->create($hostname);
-        app(HostnameRepository::class)->attach($hostname, $website);
+            // associate the website with a hostname
+            $hostname = new Hostname();
+            $hostname->fqdn = $website->uuid;
+            $hostname = app(HostnameRepository::class)->create($hostname);
+            app(HostnameRepository::class)->attach($hostname, $website);
 
-        // switch to the website's database
-        app(Environment::class)->tenant($website);
+            // switch to the website's database
+            app(Environment::class)->tenant($website);
 
-        // create store
-        $store = Store::create([
-            'name' => $request->name,
-            'logo' => $request->logo,
-            'domain' => $request->domain,
-            'subdomain' => $request->subdomain,
-            'slug' => strrev(md5(time())),
-            'country_code' => $request->country_code,
-            'country_flag' => $request->country_flag,
-            'phone_number' => $request->phone_number,
-            'extension' => $request->extension,
-        ]);
+            // create store
+            $store = Store::create([
+                'name' => $request->name,
+                'logo' => $request->logo,
+                'domain' => $request->domain,
+                'subdomain' => $request->subdomain,
+                'slug' => strrev(md5(time())),
+                'country_code' => $request->country_code,
+                'country_flag' => $request->country_flag,
+                'phone_number' => $request->phone_number,
+                'extension' => $request->extension,
+            ]);
 
-        if (!$store) {
+            if (!$store) {
+                // switch back to the central (default) database
+                app(Environment::class)->tenant();
+
+                return response()->json([
+                    'message' => 'Failed to create store'
+                ], 500);
+            }
+
+            if ($request->has('redirectUrls')) {
+                $redirectUrls = $request->redirectUrls;
+
+                foreach ($redirectUrls as $redirectUrl) {
+                    StoreUrl::create([
+                        'url' => $redirectUrl,
+                    ]);
+                }
+            }
+
+            // create theme
+            $this->createTheme($store);
+
+            // create pages
+            $this->createPages();
+
+            // create store category types
+            $this->createCategoryTypes();
+
             // switch back to the central (default) database
             app(Environment::class)->tenant();
 
+            // call artisan command to start the queue worker
+            Artisan::call('queue:work', [
+                '--queue' => 'deploy-tenant-store',
+                '--stop-when-empty' => true,
+            ]);
+            
+            // dispatch the job to deploy the store website to the main domain
+            DeployTenant::dispatch($website->uuid, $user->id, $request->password)->onQueue('deploy-tenant-store');
+
             return response()->json([
-                'message' => 'Failed to create store'
+                'message' => 'Successfully created store',
+                'store' => $store
+            ], 201);
+        } catch (\Exception $e) {
+            // undo the creation of the website and hostname
+            $website->delete();
+            $hostname->delete();
+
+            // undo the creation of the store's database
+            app(Environment::class)->tenant($website);
+            app(Environment::class)->delete();
+
+            // undo the creation of the store's user mysql account
+            DB::statement("DROP USER '" . $request->subdomain . '.' . $request->domain . "'@'localhost'");
+            
+            return response()->json([
+                'message' => 'Failed to create store',
+                'error' => $e->getMessage()
             ], 500);
         }
-
-        if ($request->has('redirectUrls')) {
-            $redirectUrls = $request->redirectUrls;
-
-            foreach ($redirectUrls as $redirectUrl) {
-                StoreUrl::create([
-                    'url' => $redirectUrl,
-                ]);
-            }
-        }
-
-        // create theme
-        $this->createTheme($store);
-
-        // create pages
-        $this->createPages();
-
-        // create store categories
-        $this->createCategories();
-
-        // create store category types
-        $this->createCategoryTypes();
-
-        // switch back to the central (default) database
-        app(Environment::class)->tenant();
-
-        // call artisan command to start the queue worker
-        Artisan::call('queue:work', [
-            '--queue' => 'deploy-tenant-store',
-            '--stop-when-empty' => true,
-        ]);
-        
-        // dispatch the job to deploy the store website to the main domain
-        DeployTenant::dispatch($website->uuid, $user->id, $request->password)->onQueue('deploy-tenant-store');
-
-        return response()->json([
-            'message' => 'Successfully created store',
-            'store' => $store
-        ], 201);
     }
 
     public function update(Request $request, $id)
@@ -567,7 +583,7 @@ class StoreController extends Controller
         Page::create([
             'navigation_title' => 'Presentations',
             'meta_title' => 'Presentations | ${siteName}',
-            'static_routes' => 'presentations',
+            'static_routes' => 'presentation',
             'slug' => 'presentations',
             'is_enabled' => true
         ]);
@@ -581,8 +597,8 @@ class StoreController extends Controller
         Page::create([
             'navigation_title' => 'Blog: Category',
             'meta_title' => 'Blog Category | ${siteName}',
-            'static_routes' => 'cat',
-            'slug' => 'cat',
+            'static_routes' => 'blog-cat',
+            'slug' => 'blog-cat',
             'is_enabled' => true
         ]);
         Page::create([
@@ -761,10 +777,10 @@ class StoreController extends Controller
             'is_enabled' => true
         ]);
         Page::create([
-            'navigation_title' => 'Suppler Products',
-            'meta_title' => 'Suppler Products | ${siteName}',
-            'static_routes' => 'supplier',
-            'slug' => 'supplier',
+            'navigation_title' => 'Supplier Products',
+            'meta_title' => 'Supplier Products | ${siteName}',
+            'static_routes' => 'supplier-products',
+            'slug' => 'supplier-products',
             'is_enabled' => true
         ]);
         Page::create([
@@ -805,8 +821,8 @@ class StoreController extends Controller
         Page::create([
             'navigation_title' => 'Products Search',
             'meta_title' => 'Products Search | ${siteName}',
-            'static_routes' => 'products',
-            'slug' => 'products',
+            'static_routes' => 'products-search',
+            'slug' => 'products-search',
             'is_enabled' => true
         ]);
         Page::create([
