@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Company;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CompanyController extends Controller
@@ -40,7 +42,13 @@ class CompanyController extends Controller
             ], 422);
         }
 
+        $user = User::find(Auth::id());
+        if (!$user) return response()->json([
+            'message' => 'User not found'
+        ], 404);
+
         $company = Company::create([
+            'user_id' => $user->id,
             'name' => $request->name,
             'website' => $request->website,
             'slug' => md5(time())

@@ -195,6 +195,9 @@ class StoreController extends Controller
         // create pages
         $this->createPages();
 
+        // create store categories
+        $this->createCategories();
+
         // create store category types
         $this->createCategoryTypes();
 
@@ -559,6 +562,371 @@ class StoreController extends Controller
             'static_routes' => 'products',
             'slug' => 'products',
             'additional_slug' => 'no-minimum',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Presentations',
+            'meta_title' => 'Presentations | ${siteName}',
+            'static_routes' => 'presentations',
+            'slug' => 'presentations',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Blog: Post (Template)',
+            'meta_title' => 'Blog Post Template',
+            'static_routes' => 'custom',
+            'slug' => 'blog/template',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Blog: Category',
+            'meta_title' => 'Blog Category | ${siteName}',
+            'static_routes' => 'cat',
+            'slug' => 'cat',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Blog',
+            'meta_title' => 'Blog | ${siteName}',
+            'static_routes' => 'blog',
+            'slug' => 'blog',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Facet Group',
+            'meta_title' => 'Facet Group | ${siteName}',
+            'static_routes' => 'facetgroup',
+            'slug' => 'facetgroup',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Product Reviews',
+            'meta_title' => 'Product Reviews | ${siteName}',
+            'static_routes' => 'product-reviews',
+            'slug' => 'product-reviews',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'My Account: Review Product',
+            'meta_title' => 'Review Product | ${siteName}',
+            'static_routes' => 'review-order-product',
+            'slug' => 'review-order-product',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'My Account: Orders: Products',
+            'meta_title' => 'Orders: Products | ${siteName}',
+            'static_routes' => 'orders-products',
+            'slug' => 'orders-products',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Facebook Deletion',
+            'meta_title' => 'Facebook Deletion | ${siteName}',
+            'static_routes' => 'sso/facebook/delete',
+            'slug' => 'sso/facebook/delete',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Single Sign On',
+            'meta_title' => 'Single Sign On | ${siteName}',
+            'static_routes' => 'sso',
+            'slug' => 'sso',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Sample Item Added',
+            'meta_title' => 'Sample Item Added | ${siteName}',
+            'static_routes' => 'sampleitemsadded',
+            'slug' => 'sampleitemsadded',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Track Shipment',
+            'meta_title' => 'Track Shipment | ${siteName}',
+            'static_routes' => 'track-shipment',
+            'slug' => 'track-shipment',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Large Quote Request Confirmation',
+            'meta_title' => 'Large Quote Request Confirmation | ${siteName}',
+            'static_routes' => 'largequoterequestconfirmation',
+            'slug' => 'largequoterequestconfirmation',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Large Quote Request',
+            'meta_title' => 'Large Quote Request | ${siteName}',
+            'static_routes' => 'largequote',
+            'slug' => 'largequote',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Presentation Confirmation',
+            'meta_title' => 'Presentation Confirmation | ${siteName}',
+            'static_routes' => 'presentationconfirmation',
+            'slug' => 'presentationconfirmation',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Order Details',
+            'meta_title' => 'Order Details | ${siteName}',
+            'static_routes' => 'order',
+            'slug' => 'order',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Payments Confirmation',
+            'meta_title' => 'Payments Confirmation | ${siteName}',
+            'static_routes' => 'paymentsconfirmation',
+            'slug' => 'paymentsconfirmation',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Payments',
+            'meta_title' => 'Payments | ${siteName}',
+            'static_routes' => 'payments',
+            'slug' => 'payments',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Favorites',
+            'meta_title' => 'Favorites | ${siteName}',
+            'static_routes' => 'favorites',
+            'slug' => 'favorites',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Create Account Confirmation',
+            'meta_title' => 'Create Account Confirmation | ${siteName}',
+            'static_routes' => 'createaccountconfirmation',
+            'slug' => 'createaccountconfirmation',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Reset Password',
+            'meta_title' => 'Reset Password | ${siteName}',
+            'static_routes' => 'resetpassword',
+            'slug' => 'resetpassword',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Change Password',
+            'meta_title' => 'Change Password | ${siteName}',
+            'static_routes' => 'changepassword',
+            'slug' => 'changepassword',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Forgot Password',
+            'meta_title' => 'Forgot Password | ${siteName}',
+            'static_routes' => 'forgotpassword',
+            'slug' => 'forgotpassword',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Contact',
+            'meta_title' => 'Contact | ${siteName}',
+            'static_routes' => 'contact',
+            'slug' => 'contact',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Terms',
+            'meta_title' => 'Terms | ${siteName}',
+            'static_routes' => 'terms',
+            'slug' => 'terms',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Privacy Policy',
+            'meta_title' => 'Privacy Policy | ${siteName}',
+            'static_routes' => 'privacy',
+            'slug' => 'privacy',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Create Account',
+            'meta_title' => 'Create Account | ${siteName}',
+            'static_routes' => 'createaccount',
+            'slug' => 'createaccount',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Proof Approval',
+            'meta_title' => 'Proof Approval | ${siteName}',
+            'static_routes' => 'proof',
+            'slug' => 'proof',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Suppler Products',
+            'meta_title' => 'Suppler Products | ${siteName}',
+            'static_routes' => 'supplier',
+            'slug' => 'supplier',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Suppliers',
+            'meta_title' => 'Suppliers | ${siteName}',
+            'static_routes' => 'suppliers',
+            'slug' => 'suppliers',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Presentation',
+            'meta_title' => 'Presentation | ${siteName}',
+            'static_routes' => 'presentation',
+            'slug' => 'presentation',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Proof Request Confirmation',
+            'meta_title' => 'Proof Request Confirmation | ${siteName}',
+            'static_routes' => 'artproofconfirmation',
+            'slug' => 'artproofconfirmation',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Proof Request',
+            'meta_title' => 'Proof Request | ${siteName}',
+            'static_routes' => 'artproof',
+            'slug' => 'artproof',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Facets',
+            'meta_title' => 'Facets | ${siteName}',
+            'static_routes' => 'facets',
+            'slug' => 'facets',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Products Search',
+            'meta_title' => 'Products Search | ${siteName}',
+            'static_routes' => 'products',
+            'slug' => 'products',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Sample Request',
+            'meta_title' => 'Sample Request | ${siteName}',
+            'static_routes' => 'sample',
+            'slug' => 'sample',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Quote Request Confirmation',
+            'meta_title' => 'Quote Request Confirmation | ${siteName}',
+            'static_routes' => 'quoterequestconfirmation',
+            'slug' => 'quoterequestconfirmation',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Quote Request',
+            'meta_title' => 'Quote Request | ${siteName}',
+            'static_routes' => 'quickquote',
+            'slug' => 'quickquote',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'All Products',
+            'meta_title' => 'All Products | ${siteName}',
+            'static_routes' => 'all-products',
+            'slug' => 'all-products',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Brands',
+            'meta_title' => 'Brands | ${siteName}',
+            'static_routes' => 'brands',
+            'slug' => 'brands',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'My Account',
+            'meta_title' => 'My Account | ${siteName}',
+            'static_routes' => 'account',
+            'slug' => 'account',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Configure Product',
+            'meta_title' => 'Configure Product | ${siteName}',
+            'static_routes' => 'configureproduct',
+            'slug' => 'configureproduct',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Designer',
+            'meta_title' => 'Designer | ${siteName}',
+            'static_routes' => 'designer',
+            'slug' => 'designer',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Sign Out',
+            'meta_title' => 'Sign Out | ${siteName}',
+            'static_routes' => 'signout',
+            'slug' => 'signout',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Sign In',
+            'meta_title' => 'Sign In | ${siteName}',
+            'static_routes' => 'signin',
+            'slug' => 'signin',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Home',
+            'meta_title' => 'Home | ${siteName}',
+            'static_routes' => 'home',
+            'slug' => 'home',
+            'is_enabled' => true,
+            'is_homepage' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Cat: Category',
+            'meta_title' => 'Cat: Category | ${siteName}',
+            'static_routes' => 'cat',
+            'slug' => 'cat',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Checkout Confirmation',
+            'meta_title' => 'Checkout Confirmation | ${siteName}',
+            'static_routes' => 'checkoutconfirmation',
+            'slug' => 'checkoutconfirmation',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Checkout',
+            'meta_title' => 'Checkout | ${siteName}',
+            'static_routes' => 'checkout',
+            'slug' => 'checkout',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Cart',
+            'meta_title' => 'Cart | ${siteName}',
+            'static_routes' => 'cart',
+            'slug' => 'cart',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Cart Items Added',
+            'meta_title' => 'Cart Items Added | ${siteName}',
+            'static_routes' => 'cartitemsadded',
+            'slug' => 'cartitemsadded',
+            'is_enabled' => true
+        ]);
+        Page::create([
+            'navigation_title' => 'Product',
+            'meta_title' => 'Product | ${siteName}',
+            'static_routes' => 'product',
+            'slug' => 'product',
             'is_enabled' => true
         ]);
     }

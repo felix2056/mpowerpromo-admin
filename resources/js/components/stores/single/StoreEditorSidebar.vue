@@ -188,22 +188,38 @@
                     Selling
                 </h6>
                 <ul class="nav flex-column">
-                    <li><a class="nav-item nav-item-hover p-1 btn-block intro-store-customers"><i
-                                class="fa-fw mx-2 far fa-users fa-fw mr-2"></i>
+                    <li>
+                        <router-link :to="{ name: 'store', query: { tab: 'Customers' } }"
+                            class="nav-item nav-item-hover p-1 btn-block intro-store-customers">
+                            <i class="fa-fw mx-2 far fa-users fa-fw mr-2"></i>
                             Customers
-                            <!----></a></li>
-                    <li><a class="nav-item nav-item-hover p-1 btn-block intro-store-specials"><i
-                                class="fa-fw mx-2 far fa-tag"></i>
+                            <!---->
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{ name: 'store', query: { tab: 'Discounts' } }"
+                            class="nav-item nav-item-hover p-1 btn-block intro-store-specials">
+                            <i class="fa-fw mx-2 far fa-tag"></i>
                             Discounts &amp; Specials
-                            <!----></a></li>
-                    <li><a class="nav-item nav-item-hover p-1 btn-block intro-store-payment"><i
-                                class="fa-fw mx-2 far fa-credit-card"></i>
+                            <!---->
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{ name: 'store', query: { tab: 'Payment' } }"
+                            class="nav-item nav-item-hover p-1 btn-block intro-store-payment">
+                            <i class="fa-fw mx-2 far fa-credit-card"></i>
                             Payment
-                            <!----></a></li>
-                    <li><a class="nav-item nav-item-hover p-1 btn-block intro-store-reports"><i
-                                class="fa-fw mx-2 far fa-chart-line fa-fw mr-2"></i>
+                            <!---->
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{ name: 'store', query: { tab: 'Reports' } }"
+                            class="nav-item nav-item-hover p-1 btn-block intro-store-reports">
+                            <i class="fa-fw mx-2 far fa-chart-line fa-fw mr-2"></i>
                             Reports
-                            <!----></a></li>
+                            <!---->
+                        </router-link>
+                    </li>
                     <li><a class="nav-item nav-item-hover p-1 btn-block intro-store-reviews"><i
                                 class="fa-fw mx-2 far fa-comment-alt-lines fa-fw mr-2"></i>
                             Reviews
@@ -297,6 +313,12 @@ import SocialMedia from './marketing/SocialMedia.vue'
 import Robots from './marketing/Robots.vue'
 import Sitemaps from './marketing/Sitemaps.vue'
 
+// selling
+import Customers from './selling/Customers.vue'
+import Discounts from './selling/Discounts.vue'
+import Payment from './selling/Payment.vue'
+import Reports from './selling/Reports.vue'
+
 export default {
     components: {
         Categories,
@@ -312,7 +334,12 @@ export default {
         // ProductFeed,
         SocialMedia,
         Robots,
-        Sitemaps
+        Sitemaps,
+
+        Customers,
+        Discounts,
+        Payment,
+        Reports
     },
 
     data() {
@@ -338,7 +365,11 @@ export default {
                 this.componentToShow === 'SocialMedia' || 
                 this.componentToShow === 'Robots' || 
                 this.componentToShow === 'Sitemaps' ||
-                this.componentToShow === 'Suppliers'
+                this.componentToShow === 'Suppliers' ||
+                this.componentToShow === 'Customers' ||
+                this.componentToShow === 'Discounts' ||
+                this.componentToShow === 'Payment' ||
+                this.componentToShow === 'Reports'
             ) { return 'col-12'; }
     
             return 'w-25';

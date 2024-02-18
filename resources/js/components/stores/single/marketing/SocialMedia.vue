@@ -32,325 +32,76 @@
                                                                         <div><!---->
                                                                             <div><!----><!----><!---->
                                                                                 <div>
-                                                                                    <div
-                                                                                        class="custom-control custom-checkbox">
+                                                                                    <div class="custom-control custom-checkbox">
                                                                                         <input true-value="true"
                                                                                             id="checkbox-7" type="checkbox"
-                                                                                            class="custom-control-input"><label
-                                                                                            for="checkbox-7"
-                                                                                            class="custom-control-label">Show</label><!---->
-                                                                                    </div><!---->
+                                                                                            v-model="social_media.show"
+                                                                                            class="custom-control-input">
+                                                                                        <label for="checkbox-7" class="custom-control-label">Show</label>
+                                                                                        <div class="small text-muted">Enable social media sharing links by social network on blog posts and product pages.</div><!---->
+                                                                                    </div>
+                                                                                    <div v-if="validationErrors.show" class="invalid-feedback d-block">
+                                                                                        {{ validationErrors.show[0] }}
+                                                                                    </div>
                                                                                 </div>
                                                                             </div><!---->
                                                                         </div>
                                                                     </div>
+
                                                                     <div class="form-group"><!---->
                                                                         <div><!---->
                                                                             <div><label>Networks</label><!----><!---->
                                                                                 <div>
                                                                                     <div>
                                                                                         <div>
-                                                                                            <div tabindex="-1"
-                                                                                                class="multiselect"
-                                                                                                style="z-index: 200;">
-                                                                                                <div
-                                                                                                    class="multiselect__select">
-                                                                                                </div>
-                                                                                                <div
-                                                                                                    class="multiselect__tags">
-                                                                                                    <div class="multiselect__tags-wrap"
-                                                                                                        style="display: none;">
-                                                                                                    </div> <!---->
-                                                                                                    <div class="multiselect__spinner"
-                                                                                                        style="display: none;">
-                                                                                                    </div> <input name=""
-                                                                                                        type="text"
-                                                                                                        autocomplete="nope"
-                                                                                                        placeholder="Select option"
-                                                                                                        tabindex="0"
-                                                                                                        class="multiselect__input"
-                                                                                                        style="width: 0px; position: absolute; padding: 0px;">
-                                                                                                    <!----> <span
-                                                                                                        class="multiselect__placeholder">
-                                                                                                        Select option
-                                                                                                    </span>
-                                                                                                </div>
-                                                                                                <div tabindex="-1"
-                                                                                                    class="multiselect__content-wrapper"
-                                                                                                    style="max-height: 300px; display: none;">
-                                                                                                    <ul class="multiselect__content"
-                                                                                                        style="display: inline-block;">
-                                                                                                        <!---->
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option multiselect__option--highlight"><span>buffer</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>email</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>evernote</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>facebook</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>flipboard</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>hackernews</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>line</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>linkedin</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>odnoklassniki</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>pinterest</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>reddit</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>skype</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>stumbleupon</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>telegram</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>tumblr</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>twitter</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>viber</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>vk</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>weibo</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>whatsapp</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>wordpress</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>xing</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            class="multiselect__element">
-                                                                                                            <span
-                                                                                                                data-select="Press enter to select"
-                                                                                                                data-selected="Selected"
-                                                                                                                data-deselect="Press enter to remove"
-                                                                                                                class="multiselect__option"><span>yammer</span></span>
-                                                                                                            <!---->
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            style="display: none;">
-                                                                                                            <span
-                                                                                                                class="multiselect__option">No
-                                                                                                                elements
-                                                                                                                found.
-                                                                                                                Consider
-                                                                                                                changing the
-                                                                                                                search
-                                                                                                                query.</span>
-                                                                                                        </li>
-                                                                                                        <li
-                                                                                                            style="display: none;">
-                                                                                                            <span
-                                                                                                                class="multiselect__option">List
-                                                                                                                is
-                                                                                                                empty.</span>
-                                                                                                        </li>
-                                                                                                    </ul>
-                                                                                                </div>
-                                                                                            </div>
+                                                                                            <Multiselect mode="tags" v-model="social_media.networks" :options="networks" :close-on-select="false" placeholder="Select option" />
                                                                                         </div>
                                                                                     </div><!---->
                                                                                 </div>
                                                                             </div><!---->
                                                                         </div>
                                                                     </div>
+
                                                                     <div class="form-group"><!---->
                                                                         <div><!---->
                                                                             <div><!----><!----><!---->
                                                                                 <div>
-                                                                                    <div
-                                                                                        class="custom-control custom-checkbox">
+                                                                                    <div class="custom-control custom-checkbox">
                                                                                         <input true-value="true"
                                                                                             id="checkbox-9" type="checkbox"
-                                                                                            class="custom-control-input"><label
-                                                                                            for="checkbox-9"
-                                                                                            class="custom-control-label">Is
-                                                                                            Rounded</label><!---->
+                                                                                            v-model="social_media.is_rounded"
+                                                                                            class="custom-control-input">
+                                                                                        <label for="checkbox-9" class="custom-control-label">Is Rounded</label>
+                                                                                        <!---->
                                                                                     </div>
-                                                                                    <!---->
+                                                                                    <div v-if="validationErrors.is_rounded" class="invalid-feedback d-block">
+                                                                                        {{ validationErrors.is_rounded[0] }}
+                                                                                    </div>
                                                                                 </div>
                                                                             </div><!---->
                                                                         </div>
                                                                     </div>
+
                                                                     <div class="form-group"><!---->
                                                                         <div><!---->
                                                                             <div><!----><!----><!---->
                                                                                 <div>
-                                                                                    <div
-                                                                                        class="custom-control custom-checkbox">
+                                                                                    <div class="custom-control custom-checkbox">
                                                                                         <input true-value="true"
                                                                                             id="checkbox-10" type="checkbox"
-                                                                                            class="custom-control-input"><label
-                                                                                            for="checkbox-10"
-                                                                                            class="custom-control-label">Has
-                                                                                            Labels</label><!---->
+                                                                                            v-model="social_media.has_labels"
+                                                                                            class="custom-control-input">
+                                                                                        <label for="checkbox-10" class="custom-control-label">Has Labels</label>
+                                                                                        <!---->
                                                                                     </div>
-                                                                                    <!---->
+                                                                                    <div v-if="validationErrors.has_labels" class="invalid-feedback d-block">
+                                                                                        {{ validationErrors.has_labels[0] }}
+                                                                                    </div>
                                                                                 </div>
                                                                             </div><!---->
                                                                         </div>
                                                                     </div>
+
                                                                     <div class="form-group"><!---->
                                                                         <div><!---->
                                                                             <div><!----><!----><!---->
@@ -368,10 +119,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-inline bg-white py-3 border-top"
-                                style="position: sticky; bottom: 0px; z-index: 49;"><!----><button type="submit"
-                                    class="btn btn-primary"><!----> Save
-                                    Social media
+
+                            <div class="form-inline bg-white py-3 border-top" style="position: sticky; bottom: 0px; z-index: 49;"><!---->
+                                <button type="button" class="btn btn-primary" @click="saveSocialMedia">
+                                    <i v-if="isLoading" class="fa fa-spinner fa-spin"></i>
+                                    Save Social media
                                 </button>
                                 <button @click="closeHeadTag" type="button" class="btn btn-link">
                                     Close
@@ -387,14 +139,51 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
+import Multiselect from '@vueform/multiselect'
 
 export default {
     name: 'SocialMedia',
+
+    components: {
+        Multiselect
+    },
 
     data() {
         return {
             isLoading: false,
             validationErrors: {},
+
+            social_media: {
+                show: false,
+                networks: [],
+                is_rounded: false,
+                has_labels: false,
+            },
+            networks: [
+                'buffer',
+                'email',
+                'evernote',
+                'facebook',
+                'flipboard',
+                'hackernews',
+                'line',
+                'linkedin',
+                'odnoklassniki',
+                'pinterest',
+                'reddit',
+                'skype',
+                'stumbleupon',
+                'telegram',
+                'tumblr',
+                'twitter',
+                'viber',
+                'vk',
+                'weibo',
+                'whatsapp',
+                'wordpress',
+                'xing',
+                'yammer',
+            ],
         }
     },
 
@@ -404,7 +193,50 @@ export default {
         })
     },
 
+    created() {
+        this.getSocialMedia()
+    },
+
     methods: {
+        async getSocialMedia() {
+            this.isLoading = true;
+
+            axios.get('/stores/social-media', {
+                headers: {
+                    'X-Tenant-UUID': this.store.host
+                }
+            })
+            .then(response => {
+                this.social_media = response.data.social_media
+            })
+            .catch(error => {
+                console.log(error)
+            })
+            .finally(() => {
+                this.isLoading = false;
+            })
+        },
+
+        async saveSocialMedia() {
+            this.isLoading = true;
+
+            axios.post('/stores/social-media/create', this.social_media, {
+                headers: {
+                    'X-Tenant-UUID': this.store.host
+                }
+            })
+            .then(response => {
+                this.closeHeadTag();
+            })
+            .catch(error => {
+                console.log(error)
+                this.validationErrors = error.response.data.errors
+            })
+            .finally(() => {
+                this.isLoading = false;
+            })
+        },
+
         closeHeadTag() {
             this.$router.push({ name: 'store' })
         }

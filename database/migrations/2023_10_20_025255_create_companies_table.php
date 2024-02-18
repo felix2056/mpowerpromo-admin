@@ -13,13 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('presentations', function (Blueprint $table) {
+        Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->string("logo")->nullable();
-            $table->string("name")->unique();
-            $table->boolean("is_template")->default(false);
-            $table->boolean("is_public")->default(false);
+            $table->bigInteger("user_id")->unsigned();
+            $table->string("name");
+            $table->string("website")->nullable();
+            $table->string("slug")->unique();
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign("user_id")->references("id")->on("users")->onDelete("cascade");
         });
     }
 
@@ -30,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('presentations');
+        Schema::dropIfExists('companies');
     }
 };

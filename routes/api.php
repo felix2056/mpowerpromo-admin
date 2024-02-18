@@ -29,7 +29,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
         Route::group(['prefix' => 'companies'], function () {
             Route::get('', 'CompanyController@index')->name('customers.companies.index');
-            Route::get('{slug}', 'CompanyController@show')->name('customers.companies.show');
+            Route::get('single/{slug}', 'CompanyController@show')->name('customers.companies.show');
             Route::post('create', 'CompanyController@store')->name('customers.companies.store');
         });
     });
@@ -86,6 +86,24 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
                 Route::match(['get', 'post'], 'color-system', 'StoreThemeController@colorSystem')->name('stores.theme.color-system');
                 Route::match(['get', 'post'], 'options', 'StoreThemeController@optionSetting')->name('stores.theme.options');
                 Route::match(['get', 'post'], 'typography', 'StoreThemeController@typographySetting')->name('stores.theme.typography');
+            });
+
+            Route::group(['prefix' => 'social-media'], function () {
+                Route::get('', 'StoreSocialMediaController@index')->name('stores.social-media.index');
+                Route::get('{slug}', 'StoreSocialMediaController@show')->name('stores.social-media.show');
+                Route::post('create', 'StoreSocialMediaController@store')->name('stores.social-media.store');
+            });
+
+            Route::group(['prefix' => 'robots'], function () {
+                Route::get('', 'StoreRobotController@index')->name('stores.robots.index');
+                Route::get('{slug}', 'StoreRobotController@show')->name('stores.robots.show');
+                Route::post('create', 'StoreRobotController@store')->name('stores.robots.store');
+            });
+
+            Route::group(['prefix' => 'sitemap'], function () {
+                Route::get('', 'StoreSitemapController@index')->name('stores.sitemap.index');
+                Route::get('{slug}', 'StoreSitemapController@show')->name('stores.sitemap.show');
+                Route::post('create', 'StoreSitemapController@store')->name('stores.sitemap.store');
             });
         });
     });

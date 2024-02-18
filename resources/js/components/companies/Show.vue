@@ -5,12 +5,16 @@
             <div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="/customers/all" class="" target="_self">Customers</a></li>
-                        <li class="breadcrumb-item"><a href="/customers/companies" class="" target="_self">Companies</a>
+                        <li class="breadcrumb-item">
+                            <router-link :to="{ name: 'all-customers' }">Customers</router-link>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <router-link :to="{ name: 'companies' }">Companies</router-link>
                         </li>
                         <li class="breadcrumb-item active"><span aria-current="page">View Company</span></li>
                     </ol>
                 </nav>
+
                 <div class="row mb-5">
                     <div class="col-md-2">
                         <div class="sticky-top sticky-top-app py-3">
@@ -34,14 +38,13 @@
                             <div class="card-header mb-2">
                                 <div class="d-flex justify-content-between">
                                     <h5 class="card-title">Information</h5>
-                                    <router-link :to="{ name: 'edit-company', params: { slug: company.slug } }" class="float-right">Edit</router-link>
+                                    <!-- <router-link :to="{ name: 'edit-company', params: { slug: company.slug } }" class="float-right">Edit</router-link> -->
                                 </div>
                             </div>
 
                             <div class="card-body">
                                 <div class="row mb-2">
                                     <div class="col-md-6">
-                                        
                                         <a :href="company.website" target="_blank" class="mb-3 d-block">
                                             {{ company.website }}
                                         </a>
@@ -54,6 +57,8 @@
                                                             <label>Account Manager</label> 
                                                         </div> 
                                                     </div>
+                                                    
+                                                    <!-- <Multiselect mode="tags" v-model="social_media.networks" :options="networks" :close-on-select="false" placeholder="Select option" /> -->
                                                     <div tabindex="-1" class="multiselect" loadonfocus="true"
                                                         query="[object Object]" optionsv="" orderby="name" ascending="1"
                                                         path="/users" isobject="true">
@@ -738,10 +743,13 @@
 import Navigation from '../includes/navigation.vue';
 import Notification from '../includes/notification.vue';
 
+import Multiselect from '@vueform/multiselect'
+
 export default {
     components: {
         Navigation,
-        Notification
+        Notification,
+        Multiselect
     },
 
     data() {

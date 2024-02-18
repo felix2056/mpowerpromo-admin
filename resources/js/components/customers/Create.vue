@@ -34,15 +34,12 @@
                                                         </div>
                                                     </div>
 
-                                                    <VueMultiselect v-model="customer.company" :options="companies"
-                                                        :multiple="false" :close-on-select="true" :preserve-search="true"
-                                                        placeholder="Select option" label="name" track-by="name"
-                                                        :max-height="300" :internal-search="true"
-                                                        :no-more-text="'No more options'" :searchable="true"
-                                                        :id="'__BVID__195'" :class="{'is-invalid': validationErrors.company_id}">
-                                                    </VueMultiselect>
+                                                    <Multiselect v-model="customer.company" :options="companyOptions"
+                                                        placeholder="Select option" :class="{'is-invalid': validationErrors.company_id}">
+                                                    </Multiselect>
                                                 </div>
                                             </div>
+                                            
                                             <div class="col-md-2 p-0" style="margin-top: 14px;">
                                                 <div class="d-flex">
                                                     <div class="d-flex align-center">
@@ -3809,7 +3806,8 @@
                                 aria-hidden="true"></span>
                             Save Customer
                         </button>
-                        <a href="/customers" class="btn btn-link router-link-active">Cancel</a>
+
+                        <router-link :to="{ name: 'customers' }" class="btn btn-link router-link-active">Cancel</router-link>
                     </div>
                 </div>
             </div>
@@ -3821,13 +3819,15 @@
 <script>
 import Navigation from '../includes/navigation.vue';
 import Notification from '../includes/notification.vue';
+import Multiselect from '@vueform/multiselect'
 import VueMultiselect from 'vue-multiselect'
 
 export default {
     components: {
         Navigation,
         Notification,
-        VueMultiselect
+        Multiselect,
+        // VueMultiselect
     },
 
     data() {
@@ -3878,6 +3878,15 @@ export default {
 
         isInvalid() {
             return Object.keys(this.validationErrors).length > 0;
+        },
+
+        companyOptions() {
+            return this.companies.map(company => {
+                return {
+                    value: company.id,
+                    label: company.name
+                }
+            });
         },
 
         sortedCompanies() {
@@ -4042,4 +4051,4 @@ export default {
 }
 </script>
 
-<style></style>
+<style src="@vueform/multiselect/themes/default.css"></style>

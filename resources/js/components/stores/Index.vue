@@ -33,42 +33,78 @@
                     <table class="VueTables__table table table-striped" style="overflow: hidden;">
                       <thead>
                         <tr>
+                          <th id="VueTables_th--logo" tabindex="0" class="VueTables__sortable "
+                            style="position: relative;"><span title="" class="VueTables__heading">Logo</span><span
+                              class="VueTables__sort-icon float-right fal glyphicon-sort "></span>
+                            <div class="resize-handle"
+                              style="top: 0px; right: 0px; width: 5px; position: absolute; cursor: col-resize; user-select: none; height: 0px;">
+                            </div>
+                          </th>
                           <th id="VueTables_th--storeName" tabindex="0" class="VueTables__sortable "
                             style="position: relative;"><span title="" class="VueTables__heading">Name</span><span
                               class="VueTables__sort-icon float-right fal fa-sort-amount-up"></span>
                             <div class="resize-handle"
-                              style="top: 0px; right: 0px; width: 5px; position: absolute; cursor: col-resize; user-select: none; height: 99px;">
+                              style="top: 0px; right: 0px; width: 5px; position: absolute; cursor: col-resize; user-select: none; height: 0px;">
                             </div>
                           </th>
                           <th id="VueTables_th--template" tabindex="0" class="VueTables__sortable "
                             style="position: relative;"><span title="" class="VueTables__heading">Template</span><span
                               class="VueTables__sort-icon float-right fal glyphicon-sort "></span>
                             <div class="resize-handle"
-                              style="top: 0px; right: 0px; width: 5px; position: absolute; cursor: col-resize; user-select: none; height: 99px;">
+                              style="top: 0px; right: 0px; width: 5px; position: absolute; cursor: col-resize; user-select: none; height: 0px;">
+                            </div>
+                          </th>
+                          <th id="VueTables_th--isActive" tabindex="0" class="VueTables__sortable "
+                            style="position: relative;"><span title="" class="VueTables__heading">Is Active</span><span
+                              class="VueTables__sort-icon float-right fal glyphicon-sort "></span>
+                            <div class="resize-handle"
+                              style="top: 0px; right: 0px; width: 5px; position: absolute; cursor: col-resize; user-select: none; height: 0px;">
                             </div>
                           </th>
                           <th id="VueTables_th--storeUrl" tabindex="0" class="VueTables__sortable "
                             style="position: relative;"><span title="" class="VueTables__heading">Domain Name</span><span
                               class="VueTables__sort-icon float-right fal glyphicon-sort "></span>
                             <div class="resize-handle"
-                              style="top: 0px; right: 0px; width: 5px; position: absolute; cursor: col-resize; user-select: none; height: 99px;">
+                              style="top: 0px; right: 0px; width: 5px; position: absolute; cursor: col-resize; user-select: none; height: 0px;">
+                            </div>
+                          </th>
+                          <th id="VueTables_th--actions" tabindex="0" class="VueTables__sortable "
+                            style="position: relative;"><span title="" class="VueTables__heading">Actions</span><span
+                              class="VueTables__sort-icon float-right fal glyphicon-sort "></span>
+                            <div class="resize-handle"
+                              style="top: 0px; right: 0px; width: 5px; position: absolute; cursor: col-resize; user-select: none; height: 0px;">
                             </div>
                           </th>
                         </tr>
                       </thead>
-                      
+
                       <tbody>
                         <tr v-for="store in stores" :key="store.id" class="VueTables__row undefined">
                           <td tabindex="0" class="">
-                            <a :href="`/stores/${store.host}`" class="">{{ store.name }}</a>
+                            <span>
+                              <img :src="store.logo" style="max-width: 100px; max-height: 40px; object-fit: cover;">
+                            </span>
+                          </td>
+
+                          <td tabindex="0" class="">
+                            <router-link :to="{ name: 'store', params: { slug: store.host } }">
+                              {{ store.name }}
+                            </router-link>
                           </td>
                           <td tabindex="0" class="">
                             <span></span>
                           </td>
                           <td tabindex="0" class="">
+                            <span>Yes</span>
+                          </td>
+                          <td tabindex="0" class="">
                             {{ store.host }}
                           </td>
-                        </tr><!---->
+                          <td tabindex="0" class="">
+                            <button type="button" class="btn btn-light btn-sm">Duplicate</button>
+                          </td>
+                        </tr>
+                        <!---->
                       </tbody>
                     </table>
                   </div>
@@ -105,7 +141,7 @@
         </div>
       </div>
     </div>
-    
+
     <notification />
   </div>
 </template>
@@ -138,7 +174,7 @@ export default {
   created() {
     this.fetchStores();
   },
-  
+
   methods: {
     fetchStores() {
       this.isLoading = true;

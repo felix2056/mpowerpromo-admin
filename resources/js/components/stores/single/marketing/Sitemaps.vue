@@ -10,126 +10,85 @@
                 </ol>
             </nav>
         </div>
+
         <div>
             <h3>Sitemap</h3>
             <div>
-                <div class="tabs nav-tabs-underline" id="__BVID__1435"><!---->
+                <div class="tabs nav-tabs-underline" id="__BVID__1435">
                     <div class="">
-                        <ul role="tablist" class="nav nav-tabs" id="__BVID__1435__BV_tab_controls_"><!---->
+                        <ul role="tablist" class="nav nav-tabs" id="__BVID__1435__BV_tab_controls_">
                             <li role="presentation" class="nav-item"><a role="tab" aria-selected="true" aria-setsize="2"
                                     aria-posinset="1" href="#" target="_self" class="nav-link active"
                                     id="__BVID__1436___BV_tab_button__" aria-controls="__BVID__1436">Editor</a></li>
                             <li role="presentation" class="nav-item"><a role="tab" tabindex="-1" aria-selected="false"
                                     aria-setsize="2" aria-posinset="2" href="#" target="_self" class="nav-link"
                                     id="__BVID__1442___BV_tab_button__" aria-controls="__BVID__1442">Site Maps</a></li>
-                            <!---->
+                            
                         </ul>
                     </div>
+                    
                     <div class="tab-content mt-3" id="__BVID__1435__BV_tab_container_">
                         <div role="tabpanel" aria-hidden="false" class="tab-pane active" id="__BVID__1436"
                             aria-labelledby="__BVID__1436___BV_tab_button__">
-                            <div data-v-3a7e9bf2="">
-                                <fieldset data-v-3a7e9bf2="" class="form-group" id="__BVID__1439"><!---->
+                            <div>
+                                <fieldset class="form-group" id="__BVID__1439">
                                     <div>
-                                        <div data-v-3a7e9bf2="" class="d-flex justify-content-between align-items-center">
-                                            <div data-v-3a7e9bf2=""><label data-v-3a7e9bf2="">Path</label> <!----></div>
-                                            <!---->
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div><label>Path</label> </div>
                                         </div>
-                                        <div data-v-3a7e9bf2="" role="group" class="input-group"><!----><!----> <input
-                                                data-v-3a7e9bf2="" name="Path" type="text" autocomplete="on"
-                                                class="form-control" maxlength="255"
-                                                onfocus="if (this.hasAttribute('readonly')) { this.removeAttribute('readonly');  this.blur();  this.focus();  }"
-                                                data-hj-allow="" data-mask="" data-previous-value="sitemaps.xml"
-                                                id="__BVID__1440"> <!----></div> <!---->
-                                        <div data-v-3a7e9bf2="" class="invalid-feedback d-block">
 
-                                        </div> <!----><!----><!---->
+                                        <div role="group" class="input-group">
+                                            <input
+                                                v-model="sitemap.path"
+                                                name="Path" type="text" autocomplete="on"
+                                                class="form-control" maxlength="255" >
+                                        </div>
+
+                                        <div v-if="validationErrors.path" class="invalid-feedback d-block">
+                                            {{ validationErrors.path[0] }}
+                                        </div> 
                                     </div>
                                 </fieldset>
                             </div>
-                            <div class="vue-codemirror"><textarea name="codemirror" placeholder=""
-                                    style="display: none;"></textarea>
-                                <div class="CodeMirror cm-s-eclipse CodeMirror-wrap" translate="no"
-                                    style="clip-path: inset(0px);">
-                                    <div
-                                        style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 4px; left: 34px;">
-                                        <textarea autocorrect="off" autocapitalize="off" spellcheck="false"
-                                            style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; min-height: 1em; outline: none;"
-                                            tabindex="0"></textarea>
-                                    </div>
-                                    <div class="CodeMirror-vscrollbar" tabindex="-1" cm-not-content="true">
-                                        <div style="min-width: 1px; height: 0px;"></div>
-                                    </div>
-                                    <div class="CodeMirror-hscrollbar" tabindex="-1" cm-not-content="true">
-                                        <div style="height: 100%; min-height: 1px; width: 0px;"></div>
-                                    </div>
-                                    <div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div>
-                                    <div class="CodeMirror-gutter-filler" cm-not-content="true"></div>
-                                    <div class="CodeMirror-scroll" tabindex="-1">
-                                        <div class="CodeMirror-sizer"
-                                            style="margin-left: 30px; margin-bottom: -16px; border-right-width: 34px; min-height: 31px; padding-right: 0px; padding-bottom: 0px;">
-                                            <div style="position: relative; top: 0px;">
-                                                <div class="CodeMirror-lines" role="presentation">
-                                                    <div role="presentation" style="position: relative; outline: none;">
-                                                        <div class="CodeMirror-measure">
-                                                            <pre class="CodeMirror-line-like"><span>xxxxxxxxxx</span></pre>
-                                                            <div class="CodeMirror-linenumber CodeMirror-gutter-elt">
-                                                                <div>1</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="CodeMirror-measure"></div>
-                                                        <div style="position: relative; z-index: 1;"></div>
-                                                        <div class="CodeMirror-cursors">
-                                                            <div class="CodeMirror-cursor"
-                                                                style="left: 4px; top: 0px; height: 22.5px;">&nbsp;</div>
-                                                        </div>
-                                                        <div class="CodeMirror-code" role="presentation">
-                                                            <div style="position: relative;">
-                                                                <div class="CodeMirror-gutter-wrapper" aria-hidden="true"
-                                                                    style="left: -30px;">
-                                                                    <div class="CodeMirror-linenumber CodeMirror-gutter-elt"
-                                                                        style="left: 0px; width: 21px;">1</div>
-                                                                </div>
-                                                                <pre class=" CodeMirror-line "
-                                                                    role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div
-                                            style="position: absolute; height: 34px; width: 1px; border-bottom: 0px solid transparent; top: 31px;">
-                                        </div>
-                                        <div class="CodeMirror-gutters" style="height: 65px; left: 1.52e-05px;">
-                                            <div class="CodeMirror-gutter CodeMirror-linenumbers" style="width: 29px;">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
+                            <div class="vue-codemirror">
+                                <Codemirror v-model:value="sitemap.content" />
                             </div>
-                            <div class="my-3"><button type="button" class="btn btn-primary mr-2"><!----> Save
-                                </button></div>
+
+                            <div class="my-3">
+                                <button @click="saveSitemap" type="button" class="btn btn-primary mr-2">
+                                    <i v-if="isLoading" class="fa fa-spinner fa-spin"></i>
+                                    Save
+                                </button>
+                            </div>
                         </div>
+
                         <div role="tabpanel" aria-hidden="true" class="tab-pane" style="display: none;" id="__BVID__1442"
                             aria-labelledby="__BVID__1442___BV_tab_button__">
-                            <div class="text-right"><button type="button" class="btn btn-light">
+                            <div class="text-right">
+                                <button type="button" class="btn btn-light">
                                     Generate Products Sitemap
-                                </button></div>
+                                </button>
+                            </div>
+                            
                             <div class="card p-3 mt-3 bg-light">
                                 <div>
                                     <form enctype="multipart/form-data" novalidate="novalidate">
                                         <h5>Upload Sitemap</h5>
                                         <div class="mt-3">
-                                            <div><label for="1444" class="btn btn-link">
+                                            <div>
+                                                <label for="1444" class="btn btn-link">
                                                     Add Sitemap
-                                                </label><span class="ml-3">No File Chosen</span><!----></div><input
+                                                </label><span class="ml-3">No File Chosen</span>
+                                            </div>
+                                            <input
                                                 type="file" id="1444" multiple="multiple" name="file" accept="text/xml"
                                                 class="input-file">
                                         </div>
-                                    </form><!----><!----><!---->
+                                    </form>
                                 </div>
                             </div>
+
                             <div>
                                 <div class="VueTables VueTables--client">
                                     <div class="row" style="display: none;">
@@ -230,17 +189,81 @@
                                     </div>
                                 </div>
                             </div>
-                        </div><!---->
+                        </div>
                     </div>
                 </div>
-            </div><!----><!---->
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-export default {
+import { mapState, mapGetters, mapActions } from 'vuex';
 
+export default {
+    data() {
+        return {
+            validationErrors: {},
+            isLoading: false,
+
+            sitemap: {
+                path: '',
+                content: ''
+            }
+        }
+    },
+
+    computed: {
+        ...mapGetters({
+            store: 'userstore/store',
+        })
+    },
+
+    created() {
+        this.getSitemap();
+    },
+
+    methods: {
+        async getSitemap() {
+            this.isLoading = true;
+
+            axios.get('/stores/sitemap', {
+                headers: {
+                    'X-Tenant-UUID': this.store.host
+                }
+            })
+            .then(response => {
+                this.sitemap = response.data.sitemap;
+            })
+            .catch(error => {
+                console.log(error);
+            })
+            .finally(() => {
+                this.isLoading = false;
+            });
+        },
+
+        async saveSitemap() {
+            this.isLoading = true;
+
+            axios.post('/stores/sitemap/create', this.sitemap, {
+                headers: {
+                    'X-Tenant-UUID': this.store.host
+                }
+            })
+            .then(response => {
+                this.sitemap = response.data.sitemap;
+            })
+            .catch(error => {
+                if (error.response.status === 422) {
+                    this.validationErrors = error.response.data.errors;
+                }
+            })
+            .finally(() => {
+                this.isLoading = false;
+            });
+        }
+    }
 }
 </script>
 
