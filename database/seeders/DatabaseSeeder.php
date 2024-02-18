@@ -14,13 +14,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->command->info('Seeding Google Product Categories');
-        // $this->call(CategorySeeder::class);
+        $this->command->info('Seeding Google Product Categories');
+        $this->call(CategorySeeder::class);
         
-        $this->command->info('Seeding Users');
-        $this->call(UserSeeder::class);
+        // $this->command->info('Seeding Users');
+        // $this->call(UserSeeder::class);
 
-        $this->command->info('Seeding Suppliers');
-        $this->call(SupplierSeeder::class);
+        // $this->command->info('Seeding Suppliers');
+        // $this->call(SupplierSeeder::class);
     }
 }

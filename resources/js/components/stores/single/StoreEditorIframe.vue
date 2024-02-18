@@ -24,7 +24,7 @@ export default {
         }),
 
         store_url() {
-            return 'http://' + this.store.subdomain + '.' + this.store.domain
+            return 'https://' + this.store.subdomain + '.' + this.store.domain
         }
     }
 }
